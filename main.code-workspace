@@ -1,0 +1,21 @@
+{
+	"folders": [
+		{
+			"name": "api-service",
+			"path": "api-service"
+		},
+		{
+			"name": "blog-app",
+			"path": "blog-app"
+		}
+	],
+	"settings": {
+		"github.copilot.enable": {
+			"*": false,
+			"plaintext": false,
+			"markdown": false,
+			"scminput": false,
+			"javascriptreact": false
+		}
+	}
+}
