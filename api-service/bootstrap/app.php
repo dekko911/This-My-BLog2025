@@ -14,13 +14,13 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        $middleware->redirectGuestsTo(function () {
-            return abort(401);
-        });
         $middleware->alias([
             'abilities' => CheckAbilities::class,
             'ability' => CheckForAnyAbility::class,
         ]);
+        $middleware->redirectGuestsTo(function () {
+            return abort(401);
+        });
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
