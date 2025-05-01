@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 
+/**
+ * Controller for Users.
+ */
 class UserController extends Controller
 {
     protected $search;
@@ -46,13 +49,13 @@ class UserController extends Controller
         ]);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, User $user)
     {
-        $user = User::find($id);
+        // tidak memakai element input hidden lagi sebagai menyembunyikan id ?
 
         $request->validate([
             'name' => ['required'],
-            'email' => ['required', 'unique:users,email,' . $user->id],
+            'email' => ['required', 'unique:users,email'],
             'password' => ['required'],
             'roles' => ['required']
         ]);
@@ -60,9 +63,12 @@ class UserController extends Controller
         $user->update([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => $request->password,
             'roles' => $request->roles
         ]);
+
+        if ($request->pasword) {
+            $user->update(['password' => $request->password]);
+        }
 
         return response()->json([
             'user' => $user,
@@ -75,7 +81,7 @@ class UserController extends Controller
         User::destroy($id);
 
         return response()->json([
-            'status' => 'User deleted',
+            'status' => 'User deleted.',
         ]);
     }
 }
