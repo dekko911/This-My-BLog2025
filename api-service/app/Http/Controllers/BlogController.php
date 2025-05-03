@@ -57,7 +57,7 @@ class BlogController extends Controller
             'title' => $request->title,
             'description' => $request->description,
             'release' => $request->release,
-            'photo' => $file_name ?? null,
+            'photo' => $file_name ?? "No Image.",
             // tanda ?? kalau variable $file_name tidak ada isi, maka diberi nilai null / kalau variable $file_name ada isi, maka nilai null tidak digunakan "NULL COALESCING"
         ]);
 
@@ -76,9 +76,8 @@ class BlogController extends Controller
         ]);
 
         if ($this->file) {
-
-            if (Storage::exists($this->file)) {
-                Storage::delete($this->file);
+            if ($request->old('photo')) {
+                Storage::delete($request->old('photo'));
             }
 
             $extension = $this->file->extension();
@@ -102,7 +101,7 @@ class BlogController extends Controller
     public function destroy($id)
     {
         if ($this->file) {
-            Storage::delete('blogs/photo');
+            Storage::delete($this->file);
         }
 
         Blog::destroy($id);
