@@ -17,7 +17,7 @@ return new class extends Migration {
             $table->string('title')->unique();
             $table->string('photo');
             $table->longText('description');
-            $table->dateTime('release');
+            $table->date('release');
             $table->timestamps();
         });
     }

@@ -12,7 +12,6 @@ return new class extends Migration {
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('blog_id')->constrained('blogs')->onDelete('cascade');
             $table->string('name')->unique();
             $table->timestamps();
         });

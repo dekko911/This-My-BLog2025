@@ -11,12 +11,14 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::middleware(['auth:sanctum', 'ability:admin'])->group(function () {
-    Route::apiResource('/users', UserController::class);
+    // Route::apiResource('/users', UserController::class);
+    // Route::apiResource('/blogs', BlogController::class);
+    // Route::apiResource('/categories', CategoryController::class);
 });
 
-Route::middleware(['auth:sanctum', 'ability:admin,writer'])->group(function () {
-    Route::apiResource('/blogs', BlogController::class);
-    Route::apiResource('/categories', CategoryController::class);
+Route::middleware(['auth:sanctum', 'ability:writer'])->group(function () {
+    // Route::apiResource('/blogs', BlogController::class);
+    // Route::apiResource('/categories', CategoryController::class);
 });
 
 Route::apiResource('/users', UserController::class);

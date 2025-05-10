@@ -24,9 +24,4 @@ class Blog extends Model
     {
         return $this->belongsTo(Category::class, 'category_id', 'id');
     }
-
-    public function blogs()
-    {
-        return $this->hasMany(Blog::class, 'blog_id', 'id');
-    }
 }

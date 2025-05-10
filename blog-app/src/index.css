@@ -13,6 +13,7 @@
 	--animate-blob: blob 6s infinite;
 	--animate-bleb: bleb 5s infinite;
 	--animate-blub: blub 7s infinite;
+
 	@keyframes blob {
 		0% {
 			transform: translate(0px, 0px) scale(1);
@@ -27,6 +28,7 @@
 			transform: translate(0px, 0px) scale(1);
 		}
 	}
+
 	@keyframes blub {
 		0% {
 			transform: translate(0px, 0px) scale(1);
@@ -41,6 +43,7 @@
 			transform: translate(0px, 0px) scale(1);
 		}
 	}
+
 	@keyframes bleb {
 		0% {
 			transform: translate(0px, 0px) scale(1);

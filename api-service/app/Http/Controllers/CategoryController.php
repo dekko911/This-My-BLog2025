@@ -19,9 +19,9 @@ class CategoryController extends Controller
 
     public function index()
     {
-        $categories = Category::latest()->with(['blog'])->where(function ($i) {
+        $categories = Category::latest()->where(function ($i) {
             if ($this->search) {
-                return $i->where('name', 'like', "%$this->search%")->orWhereRelation('blog', 'name', 'like', "%$this->search%");
+                return $i->where('name', 'like', "%$this->search%");
             }
         })->get();
 
@@ -39,26 +39,27 @@ class CategoryController extends Controller
         $category = Category::create($validated);
 
         return response()->json([
-            'category' => $category
+            'category' => $category,
         ]);
     }
 
     public function update(Request $request, Category $category)
     {
         $validated = $request->validate([
-            'name' => ['required', 'unique:categories,name']
+            'name' => ['required', 'unique:categories,name,']
         ]);
 
-        $category->update($validated);
+        $category = Category::where('id', $category->id)
+            ->update($validated);
 
         return response()->json([
             'category' => $category,
         ]);
     }
 
-    public function destroy($id)
+    public function destroy(Category $category)
     {
-        Category::destroy($id);
+        Category::destroy($category->id);
 
         return response()->json([
             'status' => 'Category Deleted.'

@@ -11,7 +11,9 @@ export const AuthLayout = ({ children }) => {
 				<Link
 					to="/users"
 					className={`hover:text-pink-500 hover:-mt-1 duration-200 ${
-						location.pathname === "/users" ? "text-white" : null
+						location.pathname === "/users"
+							? "text-white animate-pulse duration-300"
+							: null
 					}`}
 				>
 					Users
@@ -19,7 +21,9 @@ export const AuthLayout = ({ children }) => {
 				<Link
 					to="/blogs"
 					className={`hover:text-pink-500 hover:-mt-1 duration-200 ${
-						location.pathname === "/blogs" ? "text-white" : null
+						location.pathname === "/blogs"
+							? "text-white animate-pulse duration-300"
+							: null
 					}`}
 				>
 					Blogs
@@ -27,7 +31,9 @@ export const AuthLayout = ({ children }) => {
 				<Link
 					to="/profile"
 					className={`hover:text-pink-500 hover:-mt-1 duration-200 ${
-						location.pathname === "/profile" ? "text-white" : null
+						location.pathname === "/profile"
+							? "text-white animate-pulse duration-300"
+							: null
 					}`}
 				>
 					Profile
