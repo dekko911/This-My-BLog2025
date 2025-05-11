@@ -38,7 +38,7 @@ export const CreateCategoryPage = () => {
 				<h1 className="text-center text-6xl font-extrabold text-shadow-md/10 mt-10">
 					Create Category
 				</h1>
-				<div className="shadow-md/20 bg-white/20 backdrop-blur-lg mt-6 w-130 p-5 rounded-lg mb-5">
+				<div className="motion-preset-blur-up-md shadow-md/20 bg-white/20 backdrop-blur-lg mt-6 w-130 p-5 rounded-lg mb-5">
 					<form onSubmit={handleSubmit}>
 						<label htmlFor="" className="font-bold">
 							Name :

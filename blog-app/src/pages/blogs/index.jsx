@@ -118,6 +118,9 @@ export const BlogsPage = () => {
 											<button className="hover:text-red-500 duration-300 hover:text-shadow-md/10">
 												Delete
 											</button>
+											<Link className="hover:text-blue-600 hover:underline hover:text-shadow-md/10 duration-200">
+												Details ...
+											</Link>
 										</td>
 									</tr>
 								))}
