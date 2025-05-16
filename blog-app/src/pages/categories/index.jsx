@@ -56,6 +56,9 @@ export const CategoryPage = () => {
 									<th className="p-2 font-normal border-r border-zinc-200/20">
 										Name
 									</th>
+									<th className="p-2 font-normal border-r border-zinc-200/20">
+										Slug
+									</th>
 									<th className="p-2 font-normal">🛠️</th>
 								</tr>
 							</thead>
@@ -68,11 +71,10 @@ export const CategoryPage = () => {
 										<td className="border-b border-r border-zinc-200/20">
 											{category.name}
 										</td>
+										<td className="border-b border-r border-zinc-200/20">
+											{category.slug}
+										</td>
 										<td className="border-b border-zinc-200/20">
-											<Link className="me-1.5 hover:text-pink-500 duration-300 hover:text-shadow-md/10">
-												Edit
-											</Link>
-											<span className="text-zinc-200/20">|</span>
 											<button className="ms-1.5 hover:text-red-500 hover:text-shadow-md/10 duration-300">
 												Delete
 											</button>

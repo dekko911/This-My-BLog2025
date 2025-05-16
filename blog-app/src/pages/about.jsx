@@ -4,7 +4,7 @@ export const AboutPage = () => {
 	return (
 		<GuestLayout>
 			<div className="grid gap-y-3 pt-14">
-				<h1 className="text-6xl font-extrabold text-shadow-md/5 flex justify-center tracking-wider">
+				<h1 className="text-7xl font-extrabold text-shadow-md/5 flex justify-center tracking-wide">
 					About
 				</h1>
 				<div className="motion-opacity-in-0 motion-translate-y-in-[5vh] motion-blur-in-sm">

@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import Swal from "sweetalert2";
 import { AuthLayout } from "../../layouts/auth";
 
 export const CreateBlogsPage = () => {
@@ -18,6 +19,7 @@ export const CreateBlogsPage = () => {
 		form.user_id && formData.append("user_id", form.user_id);
 		form.category_id && formData.append("category_id", form.category_id);
 		form.title && formData.append("title", form.title);
+		form.slug && formData.append("slug", form.slug);
 		form.description && formData.append("description", form.description);
 		form.release && formData.append("release", form.release);
 		form.photo && formData.append("photo", form.photo);
@@ -25,9 +27,45 @@ export const CreateBlogsPage = () => {
 		try {
 			const res = await axios.post(url, formData);
 
-			console.log(res.data);
+			//console.log(res.data);
+
+			if (res.data) {
+				const Toast = Swal.mixin({
+					toast: true,
+					position: "top-end",
+					showConfirmButton: false,
+					timer: 2000,
+					timerProgressBar: true,
+					didOpen: (toast) => {
+						toast.onmouseenter = Swal.stopTimer;
+						toast.onmouseleave = Swal.resumeTimer;
+					},
+				});
+				Toast.fire({
+					icon: "success",
+					title: `${res.data.message}`,
+				});
+			}
 		} catch (error) {
 			//console.error(error);
+
+			if (error.response.data.line === 817) {
+				const Toast = Swal.mixin({
+					toast: true,
+					position: "top-end",
+					showConfirmButton: false,
+					timer: 2000,
+					timerProgressBar: true,
+					didOpen: (toast) => {
+						toast.onmouseenter = Swal.stopTimer;
+						toast.onmouseleave = Swal.resumeTimer;
+					},
+				});
+				Toast.fire({
+					icon: "error",
+					title: "Duplicate Data Blog !",
+				});
+			}
 
 			if (error.status === 422) {
 				setValidationError(error.response.data.errors);
@@ -62,7 +100,7 @@ export const CreateBlogsPage = () => {
 			const results = [];
 			res.data.categories.forEach((data) => {
 				results.push({
-					key: data.name,
+					key: data.slug,
 					value: data.id,
 				});
 			});
@@ -89,7 +127,7 @@ export const CreateBlogsPage = () => {
 						onSubmit={handleSubmit}
 						className="bg-white/20 p-5 backdrop-blur-lg rounded-lg w-full mb-9"
 					>
-						<label htmlFor="">Edited By :</label>
+						<label htmlFor="">Author :</label>
 						<select
 							className="block w-130 rounded-md my-2 p-2 focus:outline-0 text-zinc-800 bg-white"
 							name="user_id"
@@ -159,9 +197,26 @@ export const CreateBlogsPage = () => {
 							</span>
 						)}
 
+						<label htmlFor="">Slug :</label>
+						<input
+							type="text"
+							name="slug"
+							className="w-130 bg-white rounded-md my-2 p-2 focus:outline-0 block text-zinc-800"
+							placeholder="singkat-judul-padat"
+							onKeyUp={(e) => {
+								setForm((prev) => {
+									return { ...prev, [e.target.name]: e.target.value };
+								});
+							}}
+						/>
+						{validationError.slug && (
+							<span className="text-red-600 block">{validationError.slug}</span>
+						)}
+
 						<label htmlFor="">Description :</label>
 						<textarea
 							name="description"
+							contentEditable="true"
 							className="w-130 bg-white rounded-md my-2 p-2 focus:outline-0 block text-zinc-800"
 							placeholder="Silahkan Ceritakan Keluh-Kesah Hidupmu Di Kolom Ini . . ."
 							onKeyUp={(e) => {
@@ -214,8 +269,14 @@ export const CreateBlogsPage = () => {
 							</span>
 						)}
 
-						<button className="mx-auto w-full mt-5 text-2xl uppercase bg-pink-600 p-2 rounded-lg text-white font-bold font-montserrat tracking-wide shadow-md/15 hover:bg-pink-700">
+						<button className="w-full mt-5 text-2xl uppercase bg-pink-600 p-2 rounded-lg text-white font-bold cursor-pointer font-montserrat tracking-wide shadow-md/15 hover:bg-pink-700">
 							Submit
+						</button>
+						<button
+							className="bg-zinc-600 rounded-lg w-full hover:bg-zinc-700 shadow-md/15 cursor-pointer text-white mt-3.5 p-2 font-bold text-2xl uppercase font-montserrat"
+							type="reset"
+						>
+							Reset
 						</button>
 					</form>
 				</div>

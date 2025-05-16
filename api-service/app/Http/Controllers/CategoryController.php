@@ -21,7 +21,8 @@ class CategoryController extends Controller
     {
         $categories = Category::latest()->where(function ($i) {
             if ($this->search) {
-                return $i->where('name', 'like', "%$this->search%");
+                return $i->where('name', 'like', "%$this->search%")
+                    ->orWhere('slug', 'like', "%$this->search%");
             }
         })->get();
 
@@ -30,30 +31,27 @@ class CategoryController extends Controller
         ]);
     }
 
+    // public function slug($slug)
+    // {
+    //     $category = Category::where('slug', $slug)->first();
+
+    //     return response()->json([
+    //         'category' => $category,
+    //     ]);
+    // }
+
     public function store(Request $request)
     {
         $validated = $request->validate([
             'name' => ['required'],
+            'slug' => ['required'],
         ]);
 
         $category = Category::create($validated);
 
         return response()->json([
             'category' => $category,
-        ]);
-    }
-
-    public function update(Request $request, Category $category)
-    {
-        $validated = $request->validate([
-            'name' => ['required', 'unique:categories,name,']
-        ]);
-
-        $category = Category::where('id', $category->id)
-            ->update($validated);
-
-        return response()->json([
-            'category' => $category,
+            'message' => 'Data Category Has Created !'
         ]);
     }
 

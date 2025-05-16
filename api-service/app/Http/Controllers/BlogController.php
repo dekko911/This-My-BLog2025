@@ -26,7 +26,9 @@ class BlogController extends Controller
         $blogs = Blog::latest()->with(['user', 'category'])->where(function ($i) {
             if ($this->search) {
                 return $i->where('title', 'like', "%$this->search%")
+                    ->orWhere('slug', 'like', "%$this->search%")
                     ->orWhere('release', 'like', "%$this->search%")
+                    ->orWhere('description', 'like', "%$this->search%")
                     ->orWhereRelation('user', 'name', 'like', "%$this->search%")
                     ->orWhereRelation('category', 'name', 'like', "%$this->search%");
             }
@@ -37,12 +39,31 @@ class BlogController extends Controller
         ]);
     }
 
+    public function show($id)
+    {
+        $blog = Blog::with(['user', 'category'])->find($id);
+
+        return response()->json([
+            'blog' => $blog,
+        ]);
+    }
+
+    public function slug($slug)
+    {
+        $blog = Blog::with(['user', 'category'])->where('slug', $slug)->first();
+
+        return response()->json([
+            'blog' => $blog,
+        ]);
+    }
+
     public function store(Request $request)
     {
         $request->validate([
             'user_id' => ['required'],
             'category_id' => ['required'],
             'title' => ['required'],
+            'slug' => ['required'],
             'description' => ['required'],
             'release' => ['required'],
             'photo' => ['nullable', 'file', 'mimes:png,jpg'],
@@ -59,6 +80,7 @@ class BlogController extends Controller
             'user_id' => $request->user_id,
             'category_id' => $request->category_id,
             'title' => $request->title,
+            'slug' => $request->slug,
             'description' => $request->description,
             'release' => $request->release,
             'photo' => $file_name ?? null,
@@ -67,40 +89,38 @@ class BlogController extends Controller
 
         return response()->json([
             'blog' => $blog,
+            'message' => 'Data Blog Has Created !'
         ]);
     }
 
     public function update(Request $request, Blog $blog)
     {
         $request->validate([
-            'user_id' => ['required'],
-            'category_id' => ['required'],
-            'title' => ['required', 'unique:blogs,title'],
+            'title' => ['required'],
+            'slug' => ['required'],
             'description' => ['required'],
             'release' => ['required'],
-            'photo' => ['nullable', 'file', 'mimes:png,jpg'],
         ]);
 
-        if ($this->file) {
-            if ($request->old('photo')) {
-                Storage::delete('blogs/photo/' . $request->old('photo'));
-            }
+        // if ($this->file) {
+        //     if ($request->old('photo')) {
+        //         Storage::delete('blogs/photo/' . $request->old('photo'));
+        //     }
 
-            $extension = $this->file->extension();
-            $file_name = Str::random(20) . '.' . $extension;
+        //     $extension = $this->file->extension();
+        //     $file_name = Str::random(20) . '.' . $extension;
 
-            $this->file->storeAs('blogs/photo', $file_name, 'public');
-        }
+        //     $this->file->storeAs('blogs/photo', $file_name, 'public');
+        // }
 
-        $blog = Blog::where('id', $blog->id)
-            ->update([
-                'user_id' => $request->user_id,
-                'category_id' => $request->category_id,
-                'title' => $request->title,
-                'description' => $request->description,
-                'release' => $request->release,
-                'photo' => $file_name,
-            ]);
+        $blog->update([
+            'user_id' => $request->user_id,
+            'category_id' => $request->category_id,
+            'title' => $request->title,
+            'slug' => $request->slug,
+            'description' => $request->description,
+            'release' => $request->release,
+        ]);
 
         return response()->json([
             'blog' => $blog,

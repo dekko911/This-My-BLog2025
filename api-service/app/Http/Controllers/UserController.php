@@ -16,7 +16,6 @@ class UserController extends Controller
     public function __construct(User $user)
     {
         $this->search = request('search');
-        $this->user = User::where('id', $user->id);
     }
 
     public function index()
@@ -34,6 +33,15 @@ class UserController extends Controller
         ]);
     }
 
+    public function show($id)
+    {
+        $user = User::find($id);
+
+        return response()->json([
+            'user' => $user,
+        ]);
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -47,6 +55,7 @@ class UserController extends Controller
 
         return response()->json([
             'user' => $user,
+            'message' => 'User Has Created !',
         ]);
     }
 
@@ -56,19 +65,22 @@ class UserController extends Controller
 
         $request->validate([
             'name' => ['required'],
-            'email' => ['required', 'unique:users,email,' . $user->id],
-            'password' => ['required'],
+            'email' => ['required'],
             'roles' => ['required']
         ]);
 
-        $this->user->update([
+        if ($user['roles'] == 'admin') {
+            throw new \Exception("Admin user Can't Be Edit !");
+        }
+
+        $user->update([
             'name' => $request->name,
             'email' => $request->email,
             'roles' => $request->roles
         ]);
 
         if ($request->pasword) {
-            $this->user->update(['password' => $request->password]);
+            $user->update(['password' => $request->password]);
         }
 
         return response()->json([
@@ -77,9 +89,13 @@ class UserController extends Controller
         ]);
     }
 
-    public function destroy()
+    public function destroy(User $user)
     {
-        User::destroy($this->user);
+        if ($user['roles'] == 'admin') {
+            throw new \Exception("Admin user Can't Be Deleted !");
+        }
+
+        User::destroy($user->id);
 
         return response()->json([
             'status' => 'User deleted.',

@@ -1,26 +1,32 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useParams } from "react-router";
 import Swal from "sweetalert2";
 import { AuthLayout } from "../../layouts/auth";
 
-export const CreateUserPage = () => {
-	const [form, setForm] = useState({});
+export const EditUserPage = () => {
+	const params = useParams();
+	const [user, setUser] = useState({});
 	const [validationError, setValidationError] = useState([]);
+
+	useEffect(() => {
+		const fetchUser = async () => {
+			const url = `http://localhost:8000/api/users/${params.id}`;
+			const res = await axios.get(url);
+
+			setUser(res.data.user);
+		};
+
+		fetchUser();
+	}, [params.id]);
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
-		const url = "http://localhost:8000/api/users";
-
-		const formData = new FormData();
-
-		form.name && formData.append("name", form.name);
-		form.email && formData.append("email", form.email);
-		form.password && formData.append("password", form.password);
-		form.roles && formData.append("roles", form.roles);
+		const url = `http://localhost:8000/api/users/${params.id}`;
 
 		try {
-			const res = await axios.post(url, formData);
+			const res = await axios.patch(url, user);
 
 			console.log(res.data);
 
@@ -38,18 +44,22 @@ export const CreateUserPage = () => {
 				});
 				Toast.fire({
 					icon: "success",
-					title: "User Created !",
+					title: `${res.data.message}`,
 				});
 			}
 		} catch (error) {
 			//console.error(error);
 
-			if (error.response.data.line === 817) {
+			if (error.status === 422) {
+				setValidationError(error.response.data.errors);
+			}
+
+			if (error.response.status === 500) {
 				const Toast = Swal.mixin({
 					toast: true,
 					position: "top-end",
 					showConfirmButton: false,
-					timer: 2000,
+					timer: 3000,
 					timerProgressBar: true,
 					didOpen: (toast) => {
 						toast.onmouseenter = Swal.stopTimer;
@@ -57,27 +67,17 @@ export const CreateUserPage = () => {
 					},
 				});
 				Toast.fire({
-					icon: "error",
-					title: "Duplicate User !",
+					icon: "warning",
+					title: `${error.response.data.message}`,
 				});
-			}
-
-			if (error.status === 422) {
-				setValidationError(error.response.data.errors);
 			}
 		}
 	};
 
-	useEffect(() => {
-		console.log(form);
-	}, [form]);
-
 	return (
 		<AuthLayout>
 			<div className="grid justify-center gap-y-4">
-				<h1 className="font-bold text-6xl mt-6 mb-4 text-center">
-					Create User
-				</h1>
+				<h1 className="font-bold text-6xl mt-6 mb-4 text-center">Edit User</h1>
 				<form
 					onSubmit={handleSubmit}
 					className="mb-9 p-9 w-[650px] rounded-lg shadow-md/20 bg-white/10 backdrop-blur-lg motion-preset-blur-up-md"
@@ -88,10 +88,11 @@ export const CreateUserPage = () => {
 					<input
 						type="text"
 						name="name"
+						defaultValue={user.name || ""}
 						className="bg-zinc-200 rounded-md w-full focus:outline-1 focus:outline-zinc-200/20 text-black px-5 focus:animate-pulse py-2 mb-3"
 						placeholder="Your Name ..."
 						onKeyUp={(e) => {
-							setForm((prev) => {
+							setUser((prev) => {
 								return { ...prev, [e.target.name]: e.target.value };
 							});
 						}}
@@ -108,10 +109,11 @@ export const CreateUserPage = () => {
 					<input
 						type="email"
 						name="email"
+						defaultValue={user.email || ""}
 						className="bg-zinc-200 rounded-md w-full focus:outline-1 focus:outline-zinc-200/20 text-black px-5 focus:animate-pulse py-2 mb-3"
 						placeholder="example@example.com"
 						onKeyUp={(e) => {
-							setForm((prev) => {
+							setUser((prev) => {
 								return { ...prev, [e.target.name]: e.target.value };
 							});
 						}}
@@ -131,16 +133,11 @@ export const CreateUserPage = () => {
 						className="bg-zinc-200 rounded-md w-full focus:outline-1 focus:outline-zinc-200/20 text-black px-5 focus:animate-pulse py-2 mb-3"
 						placeholder="********"
 						onKeyUp={(e) => {
-							setForm((prev) => {
+							setUser((prev) => {
 								return { ...prev, [e.target.name]: e.target.value };
 							});
 						}}
 					/>
-					{validationError.password && (
-						<span className="text-red-500 text-md font-semibold">
-							{validationError.password}
-						</span>
-					)}
 
 					<label htmlFor="" className="flex font-semibold tracking-wider mb-2">
 						Roles :
@@ -148,10 +145,11 @@ export const CreateUserPage = () => {
 					<input
 						type="text"
 						name="roles"
+						defaultValue={user.roles || ""}
 						className="bg-zinc-200 rounded-md w-full focus:outline-1 focus:outline-zinc-200/20 text-black px-5 focus:animate-pulse py-2 mb-2"
 						placeholder="writer, creator, user"
 						onKeyUp={(e) => {
-							setForm((prev) => {
+							setUser((prev) => {
 								return { ...prev, [e.target.name]: e.target.value };
 							});
 						}}
@@ -162,14 +160,8 @@ export const CreateUserPage = () => {
 						</span>
 					)}
 
-					<button className="w-full mt-5 text-2xl uppercase bg-pink-600 p-2 rounded-lg text-white font-bold font-montserrat tracking-wide shadow-md/15 hover:bg-pink-700">
+					<button className="w-full mt-5 text-2xl uppercase bg-pink-600 p-2 rounded-lg text-white font-bold font-montserrat tracking-wide shadow-md/15 hover:bg-pink-700 cursor-pointer">
 						Submit
-					</button>
-					<button
-						className="bg-zinc-600 rounded-lg w-full hover:bg-zinc-700 cursor-pointer text-white mt-3.5 p-2 font-bold text-2xl uppercase font-montserrat shadow-md/15"
-						type="reset"
-					>
-						Reset
 					</button>
 				</form>
 			</div>

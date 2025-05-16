@@ -79,7 +79,7 @@ export const UsersPage = () => {
 										</td>
 										<td className="w-40 mx-auto self-center border-b border-zinc-200/20 whitespace-nowrap">
 											<Link
-												to={``}
+												to={`/users/${user.id}`}
 												className="hover:text-pink-500 duration-300 pe-1"
 											>
 												Edit

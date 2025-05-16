@@ -10,6 +10,7 @@ class Blog extends Model
         'user_id',
         'category_id',
         'title',
+        'slug',
         'description',
         'release',
         'photo',

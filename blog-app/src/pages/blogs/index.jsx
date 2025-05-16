@@ -53,7 +53,7 @@ export const BlogsPage = () => {
 										No.
 									</th>
 									<th className="p-3 font-normal border-r border-zinc-200/20">
-										Edited By
+										Author
 									</th>
 									<th className="p-3 font-normal border-r border-zinc-200/20">
 										<Link
@@ -65,6 +65,9 @@ export const BlogsPage = () => {
 									</th>
 									<th className="p-3 font-normal border-r border-zinc-200/20">
 										Title
+									</th>
+									<th className="p-3 font-normal border-r border-zinc-200/20">
+										Slug
 									</th>
 									<th className="p-3 font-normal border-r border-zinc-200/20">
 										Description
@@ -93,6 +96,14 @@ export const BlogsPage = () => {
 										<td className="p-2 border-b border-r border-zinc-200/20 w-40">
 											{blog.title}
 										</td>
+										<td className="p-2 border-b border-r border-zinc-200/20 w-40">
+											<Link
+												to={`/details/${blog.slug}`}
+												className="hover:text-blue-600 hover:underline"
+											>
+												{blog.slug}
+											</Link>
+										</td>
 										<td className="p-3 border-b border-r border-zinc-200/20 line-clamp-[5] text-justify w-[275px]">
 											{blog.description}
 										</td>
@@ -112,15 +123,15 @@ export const BlogsPage = () => {
 											/>
 										</td>
 										<td className="p-2 border-b border-zinc-200/20">
-											<Link className="block hover:text-pink-500 duration-300 hover:text-shadow-md/10">
+											<Link
+												to={`/blogs/${blog.id}`}
+												className="block hover:text-pink-500 duration-300 hover:text-shadow-md/10"
+											>
 												Edit
 											</Link>
 											<button className="hover:text-red-500 duration-300 hover:text-shadow-md/10">
 												Delete
 											</button>
-											<Link className="hover:text-blue-600 hover:underline hover:text-shadow-md/10 duration-200">
-												Details ...
-											</Link>
 										</td>
 									</tr>
 								))}

@@ -9,7 +9,8 @@ export const Header = ({ children }) => {
 					className="font-semibold font-montserrat text-2xl text-shadow-md flex items-center text-zinc-100 hover:scale-[110%] duration-300 hover:-rotate-[1.5deg]"
 				>
 					<img src="../logoM.png" alt="Logo" className="w-[50px]" />
-					<span className="text-pink-500 me-1.5">Miko's</span>Blog
+					<span className="text-pink-500 me-1.5">Miko's</span>
+					Blog
 				</Link>
 				<nav className="flex gap-x-4 text-xl font-montserrat text-shadow-sm text-zinc-300">
 					{children}
