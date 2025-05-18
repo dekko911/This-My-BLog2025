@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 import { useState } from "react";
 import { FaHome } from "react-icons/fa";
 import { Link, useNavigate } from "react-router";
-import { swalToast } from "../lib/sweet-alert";
+import { swalToast } from "../lib/alert/sweet-alert";
 
 export const LoginPage = () => {
 	const navigate = useNavigate();
@@ -33,9 +33,9 @@ export const LoginPage = () => {
 				swalToast("success", `Welcome, ${res.data.user.name} !`, 300);
 
 				if (abilities == "admin") {
-					navigate("/users");
+					navigate("/users", { flushSync: true });
 				} else {
-					navigate("/blogs");
+					navigate("/blogs", { flushSync: true });
 				}
 			}
 		} catch (error) {

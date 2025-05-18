@@ -22,6 +22,8 @@ Route::middleware(['auth:sanctum', 'ability:admin'])->group(function () {
 
 Route::middleware(['auth:sanctum', 'ability:admin,writer'])->group(function () {
     Route::apiResource('/blogs', BlogController::class);
+    Route::get('/user', [UserController::class, 'index']);
+    Route::get('/category', [CategoryController::class, 'index']);
     Route::get('/blogs/slug/{slug}', [BlogController::class, 'slug']);
 });
 

@@ -36,11 +36,11 @@ export const BlogPage = () => {
 										className=" w-80 h-60 object-cover object-center brightness-[80%] grayscale-[40%] hover:brightness-100 duration-300 hover:shadow-md/10 hover:grayscale-0"
 									/>
 								</Link>
-								<figCaption>
+								<figcaption>
 									<p className="absolute px-3 py-1 text-[13px] tracking-widest right-5 text-white top-5 uppercase font-bold font-montserrat bg-red-600">
 										{blog?.category?.name}
 									</p>
-								</figCaption>
+								</figcaption>
 							</figure>
 							<h1 className="text-center font-semibold font-montserrat text-shadow-md/10 text-lg">
 								{blog.title}

@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { AuthLayout } from "../../layouts/auth";
-import { swalToast } from "../../lib/sweet-alert";
+import { swalToast } from "../../lib/alert/sweet-alert";
 
 export const CreateBlogsPage = () => {
 	const hasToken = Cookies.get("token");
@@ -37,7 +37,7 @@ export const CreateBlogsPage = () => {
 
 			if (res.data) {
 				swalToast("success", `${res.data.message}`, 360);
-				navigate(-1);
+				navigate(-1, { flushSync: true });
 			}
 		} catch (error) {
 			if (error.response.data.line === 817) {
@@ -52,8 +52,8 @@ export const CreateBlogsPage = () => {
 
 	useEffect(() => {
 		const fetchUsers = async () => {
-			const urlUsers = "http://localhost:8000/api/users";
-			const res = await axios.get(urlUsers, {
+			const url = "http://localhost:8000/api/user";
+			const res = await axios.get(url, {
 				headers: { Authorization: `Bearer ${hasToken}` },
 			});
 
@@ -73,8 +73,8 @@ export const CreateBlogsPage = () => {
 
 	useEffect(() => {
 		const fetchCategories = async () => {
-			const urlCategories = "http://localhost:8000/api/categories";
-			const res = await axios.get(urlCategories, {
+			const url = "http://localhost:8000/api/category";
+			const res = await axios.get(url, {
 				headers: { Authorization: `Bearer ${hasToken}` },
 			});
 

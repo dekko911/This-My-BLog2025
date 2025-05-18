@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { Link } from "react-router";
 import { AuthLayout } from "../../layouts/auth";
-import { swalDialogConfirm, swalToast } from "../../lib/sweet-alert";
+import { swalDialogConfirm, swalToast } from "../../lib/alert/sweet-alert";
 import Cookies from "js-cookie";
 
 export const BlogsPage = () => {
@@ -130,7 +130,7 @@ export const BlogsPage = () => {
 												{blog.slug}
 											</Link>
 										</td>
-										<td className="p-3 border-b border-r border-zinc-200/20 line-clamp-[5] text-justify w-[270px] whitespace-pre-wrap">
+										<td className="p-3 border-b border-r border-zinc-200/20 line-clamp-5 text-justify w-[270px] whitespace-pre-wrap">
 											{blog.description}
 										</td>
 										<td className="p-2 border-b border-r border-zinc-200/20">

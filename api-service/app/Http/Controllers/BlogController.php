@@ -96,6 +96,7 @@ class BlogController extends Controller
     public function update(Request $request, Blog $blog)
     {
         $request->validate([
+            'category_id' => ['required'],
             'title' => ['required'],
             'slug' => ['required'],
             'description' => ['required'],

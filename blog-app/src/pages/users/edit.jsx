@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { AuthLayout } from "../../layouts/auth";
-import { swalToast } from "../../lib/sweet-alert";
+import { swalToast } from "../../lib/alert/sweet-alert";
 
 export const EditUserPage = () => {
 	const hasToken = Cookies.get("token");
@@ -39,7 +39,7 @@ export const EditUserPage = () => {
 
 			if (res.data) {
 				swalToast("success", `${res.data.message}`, 360);
-				navigate(-1);
+				navigate(-1, { flushSync: true });
 			}
 		} catch (error) {
 			if (error.status === 422) {

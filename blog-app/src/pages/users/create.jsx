@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { AuthLayout } from "../../layouts/auth";
-import { swalToast } from "../../lib/sweet-alert";
+import { swalToast } from "../../lib/alert/sweet-alert";
 
 export const CreateUserPage = () => {
 	const hasToken = Cookies.get("token");
@@ -25,7 +25,7 @@ export const CreateUserPage = () => {
 			if (res.data) {
 				swalToast("success", `${res.data.message}`, 300);
 
-				navigate(-1); // -1 balik sekali, -2 balik dua kali, -3 balik tiga kali ke halaman sebelumnya
+				navigate(-1, { flushSync: true }); // -1 balik sekali, -2 balik dua kali, -3 balik tiga kali ke halaman sebelumnya
 			}
 		} catch (error) {
 			if (error.response.data.line === 817) {

@@ -3,7 +3,7 @@ import { AuthLayout } from "../../layouts/auth";
 import { useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { swalToast } from "../../lib/sweet-alert";
+import { swalToast } from "../../lib/alert/sweet-alert";
 
 export const CreateRolePage = () => {
 	const hasToken = Cookies.get("token");
@@ -47,7 +47,7 @@ export const CreateRolePage = () => {
 			if (res.data) {
 				swalToast("success", `${res.data.message}`, 350);
 
-				navigate(-1);
+				navigate(-1, { flushSync: true });
 			}
 		} catch (error) {
 			//console.error(error);

@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { AuthLayout } from "../../layouts/auth";
-import { swalToast } from "../../lib/sweet-alert";
+import { swalToast } from "../../lib/alert/sweet-alert";
 
 export const EditBlogPage = () => {
 	const hasToken = Cookies.get("token");
@@ -12,7 +12,29 @@ export const EditBlogPage = () => {
 	const navigate = useNavigate();
 
 	const [blog, setBlog] = useState({});
+	const [categorySelect, setCategorySelect] = useState([]);
 	const [validationError, setValidationError] = useState([]);
+
+	useEffect(() => {
+		const fetchCategories = async () => {
+			const url = "http://localhost:8000/api/category";
+			const res = await axios.get(url, {
+				headers: { Authorization: `Bearer ${hasToken}` },
+			});
+
+			const results = [];
+			res.data.categories.forEach((data) => {
+				results.push({
+					key: data.slug,
+					value: data.id,
+				});
+			});
+
+			setCategorySelect([{ key: "Select a Category", value: "" }, ...results]);
+		};
+
+		fetchCategories();
+	}, [hasToken]);
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -39,7 +61,7 @@ export const EditBlogPage = () => {
 
 			if (res.data) {
 				swalToast("success", `${res.data.message}`, 358);
-				navigate(-1);
+				navigate(-1, { flushSync: true });
 			}
 		} catch (error) {
 			if (error.status === 422) {
@@ -79,7 +101,7 @@ export const EditBlogPage = () => {
 
 						<label htmlFor="">Category :</label>
 						<select
-							className="bg-white/50 block w-130 rounded-md my-2 p-2 focus:outline-0 text-zinc-800"
+							className="bg-white block w-130 rounded-md my-2 p-2 focus:outline-0 text-zinc-800"
 							name="category_id"
 							defaultValue={blog.category_id}
 							onChange={(e) => {
@@ -89,12 +111,20 @@ export const EditBlogPage = () => {
 									return { ...prev, [e.target.name]: categoryValue };
 								});
 							}}
-							disabled
 						>
-							<option key={blog.category_id} defaultValue={blog.category_id}>
-								{blog?.category?.name}
-							</option>
+							{categorySelect.map((category) => {
+								return (
+									<option key={category.value} value={category.value}>
+										{category.key}
+									</option>
+								);
+							})}
 						</select>
+						{validationError.category_id && (
+							<span className="text-red-600 block">
+								{validationError.category_id}
+							</span>
+						)}
 
 						<label htmlFor="">Title :</label>
 						<input

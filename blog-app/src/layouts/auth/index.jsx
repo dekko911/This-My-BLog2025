@@ -2,14 +2,16 @@ import Cookies from "js-cookie";
 import { Link, useLocation, useNavigate } from "react-router";
 import { Footer } from "../../components/footer";
 import { Header } from "../../components/header";
-import { swalToast } from "../../lib/sweet-alert";
+import { swalToast } from "../../lib/alert/sweet-alert";
 
 export const AuthLayout = ({ children }) => {
 	const navigate = useNavigate();
 	const location = useLocation();
 
 	if (!Cookies.get("token") && !Cookies.get("abilities")) {
-		navigate("/");
+		swalToast("warning", "Oops, Something Went Wrong !");
+
+		navigate("/", { preventScrollReset: true, flushSync: true });
 	}
 
 	return (
@@ -54,7 +56,7 @@ export const AuthLayout = ({ children }) => {
 
 						swalToast("info", "Goodbye !", 240);
 
-						navigate("/");
+						navigate("/", { flushSync: true, preventScrollReset: true });
 					}}
 				>
 					Logout
