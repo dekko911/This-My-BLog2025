@@ -11,7 +11,7 @@ export const BlogDetail = () => {
 
 	useEffect(() => {
 		const fetchData = async () => {
-			const url = `http://localhost:8000/api/blogs/slug/${params.slug}`;
+			const url = `http://localhost:8000/api/blog/slug/${params.slug}`;
 			const res = await axios.get(url);
 
 			setBlog(res.data.blog);

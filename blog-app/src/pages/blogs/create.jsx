@@ -1,13 +1,19 @@
 import axios from "axios";
+import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
-import Swal from "sweetalert2";
+import { useNavigate } from "react-router";
 import { AuthLayout } from "../../layouts/auth";
+import { swalToast } from "../../lib/sweet-alert";
 
 export const CreateBlogsPage = () => {
+	const hasToken = Cookies.get("token");
+
+	const navigate = useNavigate();
+
 	const [form, setForm] = useState({});
+	const [validationError, setValidationError] = useState([]);
 	const [userSelect, setUserSelect] = useState([]);
 	const [categorySelect, setCategorySelect] = useState([]);
-	const [validationError, setValidationError] = useState([]);
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -25,46 +31,17 @@ export const CreateBlogsPage = () => {
 		form.photo && formData.append("photo", form.photo);
 
 		try {
-			const res = await axios.post(url, formData);
-
-			//console.log(res.data);
+			const res = await axios.post(url, formData, {
+				headers: { Authorization: `Bearer ${hasToken}` },
+			});
 
 			if (res.data) {
-				const Toast = Swal.mixin({
-					toast: true,
-					position: "top-end",
-					showConfirmButton: false,
-					timer: 2000,
-					timerProgressBar: true,
-					didOpen: (toast) => {
-						toast.onmouseenter = Swal.stopTimer;
-						toast.onmouseleave = Swal.resumeTimer;
-					},
-				});
-				Toast.fire({
-					icon: "success",
-					title: `${res.data.message}`,
-				});
+				swalToast("success", `${res.data.message}`, 360);
+				navigate(-1);
 			}
 		} catch (error) {
-			//console.error(error);
-
 			if (error.response.data.line === 817) {
-				const Toast = Swal.mixin({
-					toast: true,
-					position: "top-end",
-					showConfirmButton: false,
-					timer: 2000,
-					timerProgressBar: true,
-					didOpen: (toast) => {
-						toast.onmouseenter = Swal.stopTimer;
-						toast.onmouseleave = Swal.resumeTimer;
-					},
-				});
-				Toast.fire({
-					icon: "error",
-					title: "Duplicate Data Blog !",
-				});
+				swalToast("error", "Duplicate Data Blog !", 320);
 			}
 
 			if (error.status === 422) {
@@ -76,7 +53,9 @@ export const CreateBlogsPage = () => {
 	useEffect(() => {
 		const fetchUsers = async () => {
 			const urlUsers = "http://localhost:8000/api/users";
-			const res = await axios.get(urlUsers);
+			const res = await axios.get(urlUsers, {
+				headers: { Authorization: `Bearer ${hasToken}` },
+			});
 
 			const results = [];
 			res.data.users.forEach((data) => {
@@ -90,12 +69,14 @@ export const CreateBlogsPage = () => {
 		};
 
 		fetchUsers();
-	}, []);
+	}, [hasToken]);
 
 	useEffect(() => {
 		const fetchCategories = async () => {
 			const urlCategories = "http://localhost:8000/api/categories";
-			const res = await axios.get(urlCategories);
+			const res = await axios.get(urlCategories, {
+				headers: { Authorization: `Bearer ${hasToken}` },
+			});
 
 			const results = [];
 			res.data.categories.forEach((data) => {
@@ -109,11 +90,7 @@ export const CreateBlogsPage = () => {
 		};
 
 		fetchCategories();
-	}, []);
-
-	useEffect(() => {
-		console.log(form);
-	}, [form]);
+	}, [hasToken]);
 
 	return (
 		<AuthLayout>
@@ -261,7 +238,7 @@ export const CreateBlogsPage = () => {
 									return { ...prev, [e.target.name]: file };
 								});
 							}}
-							className="w-130 bg-white rounded-md my-2 p-2 focus:outline-0 block text-zinc-800"
+							className="w-130 cursor-pointer bg-white rounded-md my-2 p-2 focus:outline-0 block text-zinc-800"
 						/>
 						{validationError.photo && (
 							<span className="text-red-600 block">

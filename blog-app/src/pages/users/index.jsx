@@ -3,21 +3,47 @@ import { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { Link } from "react-router";
 import { AuthLayout } from "../../layouts/auth";
+import { swalDialogConfirm, swalToast } from "../../lib/sweet-alert";
+import Cookies from "js-cookie";
 
 export const UsersPage = () => {
+	const hasToken = Cookies.get("token");
+
 	const [users, setUsers] = useState([]);
 	const [search, setSearch] = useState("");
 
 	useEffect(() => {
 		const fetchData = async () => {
 			const urlSearch = `http://localhost:8000/api/users?search=${search}`;
-			const res = await axios.get(urlSearch);
+			const res = await axios.get(urlSearch, {
+				headers: { Authorization: `Bearer ${hasToken}` },
+			});
 
 			setUsers(res.data.users);
 		};
 
 		fetchData();
-	}, [search]);
+	}, [search, hasToken]);
+
+	const handleDelete = (id) => {
+		swalDialogConfirm(
+			"Deleting User",
+			"Are You Sure Delete This User ?",
+			"info"
+		).then(async (res) => {
+			if (res.isConfirmed) {
+				const url = `http://localhost:8000/api/users/${id}`;
+				const res = await axios.delete(url, {
+					headers: { Authorization: `Bearer ${hasToken}` },
+				});
+
+				if (res.data) {
+					swalToast("success", `${res.data.status}`, 270);
+					setUsers((prev) => prev.filter((user) => user.id !== id));
+				}
+			}
+		});
+	};
 
 	return (
 		<AuthLayout>
@@ -56,8 +82,13 @@ export const UsersPage = () => {
 									<th className="font-normal border-r border-zinc-200/20 p-2">
 										Email
 									</th>
-									<th className="font-normal border-r border-zinc-200/20 p-2">
-										Roles
+									<th className="border-r border-zinc-200/20 p-2">
+										<Link
+											to="/roles"
+											className="font-normal animate-pulse hover:text-blue-600 hover:underline hover:animate-none"
+										>
+											Roles
+										</Link>
 									</th>
 									<th className="font-normal p-2">🛠️</th>
 								</tr>
@@ -75,19 +106,28 @@ export const UsersPage = () => {
 											{user.email}
 										</td>
 										<td className="border-r border-b border-zinc-200/20">
-											{user.roles}
+											{user?.roles
+												?.map((role) => {
+													return `${role.name}`;
+												})
+												.join(" ")}
 										</td>
 										<td className="w-40 mx-auto self-center border-b border-zinc-200/20 whitespace-nowrap">
 											<Link
 												to={`/users/${user.id}`}
-												className="hover:text-pink-500 duration-300 pe-1"
+												className="hover:text-pink-500 duration-300 pe-1 cursor-pointer"
 											>
 												Edit
 											</Link>
 											<span className="text-center text-zinc-200/20 text-shadow-none">
 												|
 											</span>
-											<button className="text-shadow-md/10 hover:text-red-500 duration-300 ms-1">
+											<button
+												className="text-shadow-md/10 hover:text-red-500 cursor-pointer duration-300 ms-1"
+												onClick={() => {
+													handleDelete(user.id);
+												}}
+											>
 												Delete
 											</button>
 										</td>

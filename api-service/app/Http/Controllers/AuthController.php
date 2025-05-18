@@ -18,20 +18,21 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $user = User::where('email', $request->email)->first();
 
-            $roles = $user->pluck('roles')->all();
+            $roles = $user->roles()->pluck('name')->all();
 
             $token = $user->createToken($user->name, $roles);
 
             return response()->json([
+                'status' => 'success',
                 'token' => $token,
                 'user' => $user,
-                'status' => 'success',
-            ]);
-        } else {
-            return response()->json([
-                'status' => 'fail',
-                'message' => 'The provided credentials do not match with our records.',
             ]);
         }
+
+        return response()->json([
+            'status' => 'fail',
+            'message' => 'The provided credentials do not match with our records.',
+        ]);
+
     }
 }

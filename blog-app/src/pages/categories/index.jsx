@@ -1,23 +1,51 @@
 import axios from "axios";
+import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { Link } from "react-router";
 import { AuthLayout } from "../../layouts/auth";
+import { swalDialogConfirm, swalToast } from "../../lib/sweet-alert";
 
 export const CategoryPage = () => {
+	const hasToken = Cookies.get("token");
+
 	const [categories, setCategories] = useState([]);
-	const [search, setSearch] = useState([]);
+	const [search, setSearch] = useState("");
 
 	useEffect(() => {
 		const fetchData = async () => {
 			const url = `http://localhost:8000/api/categories?search=${search}`;
-			const res = await axios.get(url);
+			const res = await axios.get(url, {
+				headers: { Authorization: `Bearer ${hasToken}` },
+			});
 
 			setCategories(res.data.categories);
 		};
 
 		fetchData();
-	}, [search]);
+	}, [search, hasToken]);
+
+	const handleDelete = (id) => {
+		swalDialogConfirm(
+			"Deleting Category",
+			"Are You Sure Deleting This Data ?",
+			"info"
+		).then(async (res) => {
+			if (res.isConfirmed) {
+				const url = `http://localhost:8000/api/categories/${id}`;
+				const res = await axios.delete(url, {
+					headers: { Authorization: `Bearer ${hasToken}` },
+				});
+
+				if (res.data) {
+					swalToast("success", `${res.data.status}`, 300);
+					setCategories((prev) =>
+						prev.filter((category) => category.id !== id)
+					);
+				}
+			}
+		});
+	};
 
 	return (
 		<AuthLayout>
@@ -75,7 +103,12 @@ export const CategoryPage = () => {
 											{category.slug}
 										</td>
 										<td className="border-b border-zinc-200/20">
-											<button className="ms-1.5 hover:text-red-500 hover:text-shadow-md/10 duration-300">
+											<button
+												className="ms-1.5 hover:text-red-500 hover:text-shadow-md/10 duration-300 cursor-pointer"
+												onClick={() => {
+													handleDelete(category.id);
+												}}
+											>
 												Delete
 											</button>
 										</td>

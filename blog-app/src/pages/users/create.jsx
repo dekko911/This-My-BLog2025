@@ -1,9 +1,14 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
-import Swal from "sweetalert2";
+import Cookies from "js-cookie";
+import { useState } from "react";
+import { useNavigate } from "react-router";
 import { AuthLayout } from "../../layouts/auth";
+import { swalToast } from "../../lib/sweet-alert";
 
 export const CreateUserPage = () => {
+	const hasToken = Cookies.get("token");
+	const navigate = useNavigate();
+
 	const [form, setForm] = useState({});
 	const [validationError, setValidationError] = useState([]);
 
@@ -12,54 +17,19 @@ export const CreateUserPage = () => {
 
 		const url = "http://localhost:8000/api/users";
 
-		const formData = new FormData();
-
-		form.name && formData.append("name", form.name);
-		form.email && formData.append("email", form.email);
-		form.password && formData.append("password", form.password);
-		form.roles && formData.append("roles", form.roles);
-
 		try {
-			const res = await axios.post(url, formData);
-
-			console.log(res.data);
+			const res = await axios.post(url, form, {
+				headers: { Authorization: `Bearer ${hasToken}` },
+			});
 
 			if (res.data) {
-				const Toast = Swal.mixin({
-					toast: true,
-					position: "top-end",
-					showConfirmButton: false,
-					timer: 2000,
-					timerProgressBar: true,
-					didOpen: (toast) => {
-						toast.onmouseenter = Swal.stopTimer;
-						toast.onmouseleave = Swal.resumeTimer;
-					},
-				});
-				Toast.fire({
-					icon: "success",
-					title: "User Created !",
-				});
+				swalToast("success", `${res.data.message}`, 300);
+
+				navigate(-1); // -1 balik sekali, -2 balik dua kali, -3 balik tiga kali ke halaman sebelumnya
 			}
 		} catch (error) {
-			//console.error(error);
-
 			if (error.response.data.line === 817) {
-				const Toast = Swal.mixin({
-					toast: true,
-					position: "top-end",
-					showConfirmButton: false,
-					timer: 2000,
-					timerProgressBar: true,
-					didOpen: (toast) => {
-						toast.onmouseenter = Swal.stopTimer;
-						toast.onmouseleave = Swal.resumeTimer;
-					},
-				});
-				Toast.fire({
-					icon: "error",
-					title: "Duplicate User !",
-				});
+				swalToast("error", "Duplicate Data User !", 320);
 			}
 
 			if (error.status === 422) {
@@ -67,10 +37,6 @@ export const CreateUserPage = () => {
 			}
 		}
 	};
-
-	useEffect(() => {
-		console.log(form);
-	}, [form]);
 
 	return (
 		<AuthLayout>
@@ -139,26 +105,6 @@ export const CreateUserPage = () => {
 					{validationError.password && (
 						<span className="text-red-500 text-md font-semibold">
 							{validationError.password}
-						</span>
-					)}
-
-					<label htmlFor="" className="flex font-semibold tracking-wider mb-2">
-						Roles :
-					</label>
-					<input
-						type="text"
-						name="roles"
-						className="bg-zinc-200 rounded-md w-full focus:outline-1 focus:outline-zinc-200/20 text-black px-5 focus:animate-pulse py-2 mb-2"
-						placeholder="writer, creator, user"
-						onKeyUp={(e) => {
-							setForm((prev) => {
-								return { ...prev, [e.target.name]: e.target.value };
-							});
-						}}
-					/>
-					{validationError.roles && (
-						<span className="text-red-500 text-md font-semibold">
-							{validationError.roles}
 						</span>
 					)}
 

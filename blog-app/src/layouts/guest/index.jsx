@@ -8,7 +8,7 @@ export const GuestLayout = ({ children }) => {
 
 	return (
 		<div className="bg-linear-90 from-zinc-400 to-zinc-600">
-			<Header>
+			<Header to="/">
 				<Link
 					to="/about"
 					className={`hover:text-pink-500 hover:-mt-0.5 duration-200 ${

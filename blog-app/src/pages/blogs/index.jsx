@@ -3,21 +3,47 @@ import { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { Link } from "react-router";
 import { AuthLayout } from "../../layouts/auth";
+import { swalDialogConfirm, swalToast } from "../../lib/sweet-alert";
+import Cookies from "js-cookie";
 
 export const BlogsPage = () => {
+	const hasToken = Cookies.get("token");
+
 	const [blogs, setBlogs] = useState([]);
 	const [search, setSearch] = useState("");
 
 	useEffect(() => {
 		const fetchData = async () => {
 			const urlSearch = `http://localhost:8000/api/blogs?search=${search}`;
-			const res = await axios.get(urlSearch);
+			const res = await axios.get(urlSearch, {
+				headers: { Authorization: `Bearer ${hasToken}` },
+			});
 
 			setBlogs(res.data.blogs);
 		};
 
 		fetchData();
-	}, [search]);
+	}, [search, hasToken]);
+
+	const handleDelete = (id) => {
+		swalDialogConfirm(
+			"Deleting Data Blog",
+			"Are You Sure Delete This Data ?",
+			"info"
+		).then(async (res) => {
+			if (res.isConfirmed) {
+				const url = `http://localhost:8000/api/blogs/${id}`;
+				const res = await axios.delete(url, {
+					headers: { Authorization: `Bearer ${hasToken}` },
+				});
+
+				if (res.data) {
+					swalToast("success", `${res.data.status}`, 270);
+					setBlogs((prev) => prev.filter((blog) => blog.id !== id));
+				}
+			}
+		});
+	};
 
 	return (
 		<AuthLayout>
@@ -96,7 +122,7 @@ export const BlogsPage = () => {
 										<td className="p-2 border-b border-r border-zinc-200/20 w-40">
 											{blog.title}
 										</td>
-										<td className="p-2 border-b border-r border-zinc-200/20 w-40">
+										<td className="p-2 border-b border-r border-zinc-200/20 w-30">
 											<Link
 												to={`/details/${blog.slug}`}
 												className="hover:text-blue-600 hover:underline"
@@ -104,7 +130,7 @@ export const BlogsPage = () => {
 												{blog.slug}
 											</Link>
 										</td>
-										<td className="p-3 border-b border-r border-zinc-200/20 line-clamp-[5] text-justify w-[275px]">
+										<td className="p-3 border-b border-r border-zinc-200/20 line-clamp-[5] text-justify w-[270px] whitespace-pre-wrap">
 											{blog.description}
 										</td>
 										<td className="p-2 border-b border-r border-zinc-200/20">
@@ -125,11 +151,16 @@ export const BlogsPage = () => {
 										<td className="p-2 border-b border-zinc-200/20">
 											<Link
 												to={`/blogs/${blog.id}`}
-												className="block hover:text-pink-500 duration-300 hover:text-shadow-md/10"
+												className="block hover:text-pink-500 duration-300 hover:text-shadow-md/10 cursor-pointer"
 											>
 												Edit
 											</Link>
-											<button className="hover:text-red-500 duration-300 hover:text-shadow-md/10">
+											<button
+												className="hover:text-red-500 duration-300 hover:text-shadow-md/10 cursor-pointer"
+												onClick={() => {
+													handleDelete(blog.id);
+												}}
+											>
 												Delete
 											</button>
 										</td>

@@ -1,26 +1,31 @@
 import axios from "axios";
+import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
-import Swal from "sweetalert2";
+import { useNavigate, useParams } from "react-router";
 import { AuthLayout } from "../../layouts/auth";
+import { swalToast } from "../../lib/sweet-alert";
 
 export const EditBlogPage = () => {
+	const hasToken = Cookies.get("token");
+
 	const params = useParams();
+	const navigate = useNavigate();
+
 	const [blog, setBlog] = useState({});
 	const [validationError, setValidationError] = useState([]);
 
 	useEffect(() => {
 		const fetchData = async () => {
 			const url = `http://localhost:8000/api/blogs/${params.id}`;
-			const res = await axios.get(url);
-
-			console.log(res.data);
+			const res = await axios.get(url, {
+				headers: { Authorization: `Bearer ${hasToken}` },
+			});
 
 			setBlog(res.data.blog);
 		};
 
 		fetchData();
-	}, [params.id]);
+	}, [params.id, hasToken]);
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -28,30 +33,15 @@ export const EditBlogPage = () => {
 		const url = `http://localhost:8000/api/blogs/${params.id}`;
 
 		try {
-			const res = await axios.patch(url, blog);
-
-			//console.log(res.data);
+			const res = await axios.patch(url, blog, {
+				headers: { Authorization: `Bearer ${hasToken}` },
+			});
 
 			if (res.data) {
-				const Toast = Swal.mixin({
-					toast: true,
-					position: "top-end",
-					showConfirmButton: false,
-					timer: 2000,
-					timerProgressBar: true,
-					didOpen: (toast) => {
-						toast.onmouseenter = Swal.stopTimer;
-						toast.onmouseleave = Swal.resumeTimer;
-					},
-				});
-				Toast.fire({
-					icon: "success",
-					title: `${res.data.message}`,
-				});
+				swalToast("success", `${res.data.message}`, 358);
+				navigate(-1);
 			}
 		} catch (error) {
-			console.error(error);
-
 			if (error.status === 422) {
 				setValidationError(error.response.data.errors);
 			}

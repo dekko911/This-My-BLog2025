@@ -1,9 +1,15 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
-import Swal from "sweetalert2";
+import Cookies from "js-cookie";
+import { useState } from "react";
+import { useNavigate } from "react-router";
 import { AuthLayout } from "../../layouts/auth";
+import { swalToast } from "../../lib/sweet-alert";
 
 export const CreateCategoryPage = () => {
+	const hasToken = Cookies.get("token");
+
+	const navigate = useNavigate();
+
 	const [form, setForm] = useState({});
 	const [validationError, setValidationError] = useState([]);
 
@@ -12,53 +18,18 @@ export const CreateCategoryPage = () => {
 
 		const url = "http://localhost:8000/api/categories";
 
-		const formData = new FormData();
-
-		form.name && formData.append("name", form.name);
-		form.slug && formData.append("slug", form.slug);
-
 		try {
-			const res = await axios.post(url, formData);
-
-			//console.log(res.data);
+			const res = await axios.post(url, form, {
+				headers: { Authorization: `Bearer ${hasToken}` },
+			});
 
 			if (res.data) {
-				const Toast = Swal.mixin({
-					toast: true,
-					position: "top-end",
-					showConfirmButton: false,
-					timer: 2000,
-					timerProgressBar: true,
-					didOpen: (toast) => {
-						toast.onmouseenter = Swal.stopTimer;
-						toast.onmouseleave = Swal.resumeTimer;
-					},
-					width: 390,
-				});
-				Toast.fire({
-					icon: "success",
-					title: `${res.data.message}`,
-				});
+				swalToast("success", `${res.data.message}`, 390);
+				navigate(-1);
 			}
 		} catch (error) {
-			//console.error(error);
-
 			if (error.response.data.line === 817) {
-				const Toast = Swal.mixin({
-					toast: true,
-					position: "top-end",
-					showConfirmButton: false,
-					timer: 2000,
-					timerProgressBar: true,
-					didOpen: (toast) => {
-						toast.onmouseenter = Swal.stopTimer;
-						toast.onmouseleave = Swal.resumeTimer;
-					},
-				});
-				Toast.fire({
-					icon: "error",
-					title: "Duplicate Data Blog !",
-				});
+				swalToast("error", "Duplicate Data !", 290);
 			}
 
 			if (error.status === 422) {
@@ -66,10 +37,6 @@ export const CreateCategoryPage = () => {
 			}
 		}
 	};
-
-	useEffect(() => {
-		console.log(form);
-	}, [form]);
 
 	return (
 		<AuthLayout>

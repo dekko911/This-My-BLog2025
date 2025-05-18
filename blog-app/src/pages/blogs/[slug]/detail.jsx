@@ -1,22 +1,27 @@
 import axios from "axios";
+import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
-import { AuthLayout } from "../../../layouts/auth";
 import { useParams } from "react-router";
+import { AuthLayout } from "../../../layouts/auth";
 
 export const BlogDetails = () => {
+	const hasToken = Cookies.get("token");
+
 	const params = useParams();
 	const [blog, setBlog] = useState([]);
 
 	useEffect(() => {
 		const fetchData = async () => {
 			const url = `http://localhost:8000/api/blogs/slug/${params.slug}`;
-			const res = await axios.get(url);
+			const res = await axios.get(url, {
+				headers: { Authorization: `Bearer ${hasToken}` },
+			});
 
 			setBlog(res.data.blog);
 		};
 
 		fetchData();
-	}, [params.slug]);
+	}, [params.slug, hasToken]);
 
 	return (
 		<AuthLayout>

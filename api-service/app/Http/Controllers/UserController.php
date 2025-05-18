@@ -11,20 +11,19 @@ use Illuminate\Http\Request;
 class UserController extends Controller
 {
     protected $search;
-    public $user;
 
-    public function __construct(User $user)
+    public function __construct()
     {
         $this->search = request('search');
     }
 
     public function index()
     {
-        $users = User::oldest()->where(function ($i) {
+        $users = User::oldest()->with(['roles'])->where(function ($i) {
             if ($this->search) {
                 return $i->where('name', 'like', "%$this->search%")
                     ->orWhere('email', 'like', "%$this->search%")
-                    ->orWhere('roles', 'like', "%$this->search%");
+                    ->orWhereRelation('roles', 'name', 'like', "%$this->search%");
             }
         })->get();
 
@@ -48,7 +47,6 @@ class UserController extends Controller
             'name' => ['required'],
             'email' => ['required'],
             'password' => ['required'],
-            'roles' => ['required'],
         ]);
 
         $user = User::create($validated);
@@ -66,17 +64,15 @@ class UserController extends Controller
         $request->validate([
             'name' => ['required'],
             'email' => ['required'],
-            'roles' => ['required']
         ]);
 
-        if ($user['roles'] == 'admin') {
+        if ($user['id'] == 1) {
             throw new \Exception("Admin user Can't Be Edit !");
         }
 
         $user->update([
             'name' => $request->name,
             'email' => $request->email,
-            'roles' => $request->roles
         ]);
 
         if ($request->pasword) {
@@ -91,11 +87,12 @@ class UserController extends Controller
 
     public function destroy(User $user)
     {
-        if ($user['roles'] == 'admin') {
+        if ($user['id'] == 1) {
             throw new \Exception("Admin user Can't Be Deleted !");
         }
 
         User::destroy($user->id);
+        User::tokens()->where('id', $user->id)->delete();
 
         return response()->json([
             'status' => 'User deleted.',

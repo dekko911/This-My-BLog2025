@@ -5,11 +5,11 @@ import { GuestLayout } from "../layouts/guest";
 
 export const BlogPage = () => {
 	const [blogs, setBlogs] = useState([]);
-	//const [search, setSearch] = useState([]);
+	//const [search, setSearch] = useState("");
 
 	useEffect(() => {
 		const fetchData = async () => {
-			const url = `http://localhost:8000/api/blogs`;
+			const url = `http://localhost:8000/api/blog`;
 			const res = await axios.get(url);
 
 			setBlogs(res.data.blogs);
@@ -33,7 +33,7 @@ export const BlogPage = () => {
 									<img
 										src={`http://localhost:8000/storage/blogs/photo/${blog.photo}`}
 										alt="Photo"
-										className=" w-80 h-55 brightness-[80%] grayscale-[40%] hover:brightness-100 duration-300 hover:shadow-md/10 hover:grayscale-0"
+										className=" w-80 h-60 object-cover object-center brightness-[80%] grayscale-[40%] hover:brightness-100 duration-300 hover:shadow-md/10 hover:grayscale-0"
 									/>
 								</Link>
 								<figCaption>

@@ -1,13 +1,20 @@
-import { Link, useLocation } from "react-router";
+import Cookies from "js-cookie";
+import { Link, useLocation, useNavigate } from "react-router";
 import { Footer } from "../../components/footer";
 import { Header } from "../../components/header";
+import { swalToast } from "../../lib/sweet-alert";
 
 export const AuthLayout = ({ children }) => {
+	const navigate = useNavigate();
 	const location = useLocation();
+
+	if (!Cookies.get("token") && !Cookies.get("abilities")) {
+		navigate("/");
+	}
 
 	return (
 		<div className="bg-linear-90 from-zinc-700 to-zinc-500">
-			<Header>
+			<Header to="/users">
 				<Link
 					to="/users"
 					className={`hover:text-pink-500 hover:-mt-1 duration-200 ${
@@ -38,6 +45,20 @@ export const AuthLayout = ({ children }) => {
 				>
 					Profile
 				</Link>
+
+				<button
+					className={`hover:text-pink-500 hover:translate-x-1 duration-200 text-shadow-sm/5`}
+					onClick={() => {
+						Cookies.remove("token");
+						Cookies.remove("abilities");
+
+						swalToast("info", "Goodbye !", 240);
+
+						navigate("/");
+					}}
+				>
+					Logout
+				</button>
 			</Header>
 
 			<div className="text-zinc-50">{children}</div>

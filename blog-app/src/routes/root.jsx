@@ -18,6 +18,9 @@ import { LoginPage } from "../pages/login";
 
 import { Profile } from "../pages/profile";
 
+import { RolesPage } from "../pages/roles";
+import { CreateRolePage } from "../pages/roles/create";
+
 import { UsersPage } from "../pages/users";
 import { CreateUserPage } from "../pages/users/create";
 import { EditUserPage } from "../pages/users/edit";
@@ -42,6 +45,9 @@ export const RootRoute = () => {
 				<Route path="/login" element={<LoginPage />} />
 
 				<Route path="/profile" element={<Profile />} />
+
+				<Route path="/roles" element={<RolesPage />} />
+				<Route path="/roles/create" element={<CreateRolePage />} />
 
 				<Route path="/users" element={<UsersPage />} />
 				<Route path="/users/create" element={<CreateUserPage />} />
