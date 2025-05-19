@@ -42,7 +42,7 @@ export const BlogDetails = () => {
 						);
 					}}
 				/>
-				<p className="text-justify whitespace-pre-wrap font-lora">
+				<p className="text-justify text-base/relaxed whitespace-pre-wrap font-lora">
 					<span className="font-semibold">Description : </span>
 					{blog.description}
 				</p>

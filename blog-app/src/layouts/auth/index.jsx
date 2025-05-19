@@ -23,7 +23,7 @@ export const AuthLayout = ({ children }) => {
 						location.pathname === "/users"
 							? "text-white animate-pulse duration-300"
 							: null
-					}`}
+					} ${Cookies.get("abilities") != "admin" ? "hidden" : "block"}`}
 				>
 					Users
 				</Link>

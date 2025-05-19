@@ -5,6 +5,18 @@
 @import "tailwindcss";
 @plugin "tailwindcss-motion";
 
+@theme inline {
+	--animate-aurora: aurora 60s linear infinite;
+	@keyframes aurora {
+		from {
+			background-position: 50% 50%, 50% 50%;
+		}
+		to {
+			background-position: 350% 50%, 350% 50%;
+		}
+	}
+}
+
 @theme {
 	--font-montserrat: "Montserrat", sans-serif;
 	--font-poppins: "Poppins", sans-serif;

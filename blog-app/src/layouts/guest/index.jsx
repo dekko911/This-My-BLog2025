@@ -1,7 +1,6 @@
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 import { Footer } from "../../components/footer";
 import { Header } from "../../components/header";
-import { useLocation } from "react-router";
 
 export const GuestLayout = ({ children }) => {
 	const location = useLocation();
