@@ -53,6 +53,8 @@ export const AuthLayout = ({ children }) => {
 					onClick={() => {
 						Cookies.remove("token");
 						Cookies.remove("abilities");
+						Cookies.remove("name");
+						Cookies.remove("email");
 
 						swalToast("info", "Goodbye !", 240);
 

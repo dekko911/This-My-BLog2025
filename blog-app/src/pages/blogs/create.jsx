@@ -65,7 +65,11 @@ export const CreateBlogsPage = () => {
 				});
 			});
 
-			setUserSelect([{ key: "Select a User", value: "" }, ...results]);
+			setUserSelect(
+				[{ key: "Select a User", value: "" }, ...results].filter(
+					(user) => user.value !== 1 //skip id no 1 || show only id no 1 if operator === like this
+				)
+			);
 		};
 
 		fetchUsers();

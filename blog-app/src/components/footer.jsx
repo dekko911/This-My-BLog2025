@@ -5,7 +5,7 @@ export const Footer = () => {
 	return (
 		<div className="bg-linear-90 from-zinc-600 to-zinc-800 p-5 grid grid-cols-2 gap-4 inset-shadow-sm inset-shadow-zinc-900/40">
 			<div className="flex items-center m-[30px] ps-[5.5%] w-[200px]">
-				<img src="../logoM.png" alt="Logo" />
+				<img src="../src/assets/photo/logoM.png" alt="Logo" />
 			</div>
 			<div className="justify-end items-center align-middle text-zinc-50 grid grid-rows-2 gap-y-4 pe-12">
 				<span className="ps-1 font-bold text-xl uppercase tracking-[0.4rem] font-poppins self-end">

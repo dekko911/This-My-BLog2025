@@ -17,11 +17,12 @@ Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::middleware(['auth:sanctum', 'ability:admin'])->group(function () {
     Route::apiResource('/users', UserController::class);
     Route::apiResource('/roles', RoleController::class);
-    Route::apiResource('/categories', CategoryController::class);
 });
 
 Route::middleware(['auth:sanctum', 'ability:admin,writer'])->group(function () {
     Route::apiResource('/blogs', BlogController::class);
+    Route::apiResource('/categories', CategoryController::class);
+    Route::apiResource('/profile', AuthController::class);
     Route::get('/user', [UserController::class, 'index']);
     Route::get('/category', [CategoryController::class, 'index']);
     Route::get('/blogs/slug/{slug}', [BlogController::class, 'slug']);

@@ -9,9 +9,12 @@ export const HomePage = () => {
 					Welcome !
 				</h1>
 				<img
-					src="../photo2.png"
+					src="../src/assets/photo/photo2.png"
 					alt="Photo"
-					className="-translate-y-[20%] scale-x-[-1] mask-b-from-38% mask-b-to-95% lg:translate-x-[25%] z-[1] lg:w-[600px] duration-500 transform-gpu brightness-130 grayscale-100 hover:grayscale-0 hover:saturate-150"
+					className="-translate-y-[20%] scale-x-[-1] mask-b-from-38% mask-b-to-95% lg:translate-x-[25%] z-[1] lg:w-[600px] duration-500 transform-gpu brightness-130 grayscale-100 hover:grayscale-0 hover:saturate-150 cursor-pointer"
+					onClick={() => {
+						window.open("../src/assets/photo/photo2.png", "_blank");
+					}}
 				/>
 				<p className="flex font-montserrat items-center lg:text-lg/8 sm:text-base/relaxed text-justify pe-[15%]">
 					Selamat Datang di Blog Dekko! Blog ini berisi informasi tentang Miko,

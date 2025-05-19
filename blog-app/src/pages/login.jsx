@@ -14,28 +14,35 @@ export const LoginPage = () => {
 	const handleLogin = async (e) => {
 		e.preventDefault();
 
-		const url = "http://localhost:8000/api/login";
-
 		try {
+			const url = "http://localhost:8000/api/login";
 			const res = await axios.post(url, form);
 
 			if (res.data) {
-				const plainTextToken = res.data.token.plainTextToken;
-				const token = plainTextToken.split("|")[1];
+				if (res.data.status && res.data.status === "success") {
+					const plainTextToken = res.data.token.plainTextToken;
+					const token = plainTextToken.split("|")[1];
 
-				const abilities = res.data.token.accessToken.abilities;
+					const abilities = res.data.token.accessToken.abilities;
+					const name = res.data.token.accessToken.name;
+					const email = res.data.user.email;
 
-				Cookies.set("token", token);
-				Cookies.set("abilities", abilities);
+					Cookies.set("token", token);
+					Cookies.set("abilities", abilities);
+					Cookies.set("name", name);
+					Cookies.set("email", email);
 
-				//console.log(res.data);
+					swalToast("success", `Welcome, ${res.data.user.name} !`, 300);
 
-				swalToast("success", `Welcome, ${res.data.user.name} !`, 300);
+					if (abilities == "admin") {
+						navigate("/users", { flushSync: true });
+					} else {
+						navigate("/blogs", { flushSync: true });
+					}
+				}
 
-				if (abilities == "admin") {
-					navigate("/users", { flushSync: true });
-				} else {
-					navigate("/blogs", { flushSync: true });
+				if (res.data.status && res.data.status === "fail") {
+					swalToast("warning", `${res.data.message}`);
 				}
 			}
 		} catch (error) {

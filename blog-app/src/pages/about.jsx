@@ -22,9 +22,9 @@ export const AboutPage = () => {
 						</h1>
 					</div>
 					<div
-						className="bg-[url(../photo1.jpg)] bg-center bg-cover grayscale-100 bg-no-repeat py-[250px] hover:grayscale-0 duration-500 transform-gpu hover:saturate-125 cursor-pointer"
+						className="bg-[url(../src/assets/photo/photo1.jpg)] bg-center bg-cover grayscale-100 bg-no-repeat py-[250px] hover:grayscale-0 duration-500 transform-gpu hover:saturate-125 cursor-pointer"
 						onClick={() => {
-							window.open("../photo1.jpg");
+							window.open("../src/assets/photo/photo1.jpg");
 						}}
 					/>
 					<p className="font-lora flex justify-center text-justify mx-[250px] pt-5 text-base/loose tracking-normal text-shadow-sm/5">
