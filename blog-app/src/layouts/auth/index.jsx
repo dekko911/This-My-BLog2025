@@ -5,8 +5,8 @@ import { Header } from "../../components/header";
 import { swalToast } from "../../lib/alert/sweet-alert";
 
 export const AuthLayout = ({ children }) => {
-	const navigate = useNavigate();
 	const location = useLocation();
+	const navigate = useNavigate();
 
 	if (!Cookies.get("token") && !Cookies.get("abilities")) {
 		swalToast("warning", "Oops, Something Went Wrong !");
@@ -49,7 +49,7 @@ export const AuthLayout = ({ children }) => {
 				</Link>
 
 				<button
-					className={`hover:text-pink-500 hover:translate-x-1 duration-200 text-shadow-sm/5`}
+					className={`hover:text-pink-500 hover:translate-x-1 duration-200 text-shadow-sm/5 cursor-pointer`}
 					onClick={() => {
 						Cookies.remove("token");
 						Cookies.remove("abilities");

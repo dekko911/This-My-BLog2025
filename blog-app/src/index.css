@@ -5,6 +5,7 @@
 @import "tailwindcss";
 @plugin "tailwindcss-motion";
 
+/* for aurora ui */
 @theme inline {
 	--animate-aurora: aurora 60s linear infinite;
 	@keyframes aurora {
@@ -17,57 +18,10 @@
 	}
 }
 
+/* this custom || add tailwind css styles */
 @theme {
 	--font-montserrat: "Montserrat", sans-serif;
 	--font-poppins: "Poppins", sans-serif;
 	--font-playfair-display: "Playfair Display", serif;
 	--font-lora: "Lora", serif;
-	--animate-blob: blob 6s infinite;
-	--animate-bleb: bleb 5s infinite;
-	--animate-blub: blub 7s infinite;
-
-	@keyframes blob {
-		0% {
-			transform: translate(0px, 0px) scale(1);
-		}
-		33% {
-			transform: translate(30px, -50px) scale(1.1);
-		}
-		66% {
-			transform: translate(-20px, 20px) scale(0.9);
-		}
-		100% {
-			transform: translate(0px, 0px) scale(1);
-		}
-	}
-
-	@keyframes blub {
-		0% {
-			transform: translate(0px, 0px) scale(1);
-		}
-		33% {
-			transform: translate(-30px, 50px) scale(1.1);
-		}
-		66% {
-			transform: translate(20px, -20px) scale(0.9);
-		}
-		100% {
-			transform: translate(0px, 0px) scale(1);
-		}
-	}
-
-	@keyframes bleb {
-		0% {
-			transform: translate(0px, 0px) scale(1);
-		}
-		33% {
-			transform: translate(55px, 90px) scale(1.1);
-		}
-		66% {
-			transform: translate(-50px, 40px) scale(0.9);
-		}
-		100% {
-			transform: translate(0px, 0px) scale(1);
-		}
-	}
 }

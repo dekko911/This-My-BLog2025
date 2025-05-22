@@ -92,7 +92,6 @@ class UserController extends Controller
         }
 
         User::destroy($user->id);
-        User::tokens()->where('id', $user->id)->delete();
 
         return response()->json([
             'status' => 'User deleted.',

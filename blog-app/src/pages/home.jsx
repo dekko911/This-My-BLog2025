@@ -5,7 +5,7 @@ export const HomePage = () => {
 	return (
 		<GuestLayout>
 			<div className="grid grid-cols-2 -mt-[10%] motion-opacity-in-0 motion-translate-y-in-[5vh] motion-blur-in-sm -mb-[8%] sm:overflow-x-hidden">
-				<h1 className="col-span-2 col-start-2 font-montserrat sm:translate-y-30 sm:text-5xl sm:mb-3 sm:text-shadow-sm/10 lg:text-shadow-none md:text-5xl lg:translate-y-75 lg:ms-[13%] lg:text-7xl font-extrabold bg-linear-90 from-zinc-500 to-zinc-400 bg-clip-text text-transparent lg:me-[30%]">
+				<h1 className="col-span-2 col-start-2 font-montserrat sm:translate-y-30 sm:text-5xl sm:mb-3 sm:text-shadow-sm/10 lg:text-shadow-none md:text-5xl lg:translate-y-76 lg:ms-[13%] lg:text-7xl font-extrabold bg-linear-90 from-zinc-500 to-zinc-400 bg-clip-text text-transparent lg:me-[30%]">
 					Welcome !
 				</h1>
 				<img

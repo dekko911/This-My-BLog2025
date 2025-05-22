@@ -19,7 +19,7 @@ Route::middleware(['auth:sanctum', 'ability:admin'])->group(function () {
     Route::apiResource('/roles', RoleController::class);
 });
 
-Route::middleware(['auth:sanctum', 'ability:admin,writer'])->group(function () {
+Route::middleware(['auth:sanctum', 'ability:admin,writer,user'])->group(function () {
     Route::apiResource('/blogs', BlogController::class);
     Route::apiResource('/categories', CategoryController::class);
     Route::apiResource('/profile', AuthController::class);
