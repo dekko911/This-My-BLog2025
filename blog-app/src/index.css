@@ -18,7 +18,7 @@
 	}
 }
 
-/* this custom || add tailwind css styles */
+/* this add tailwind css styles */
 @theme {
 	--font-montserrat: "Montserrat", sans-serif;
 	--font-poppins: "Poppins", sans-serif;

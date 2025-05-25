@@ -10,6 +10,7 @@ export const UsersPage = () => {
 	const hasToken = Cookies.get("token");
 
 	const [users, setUsers] = useState([]);
+	const [isLoading, setIsLoading] = useState(true);
 	const [search, setSearch] = useState("");
 
 	useEffect(() => {
@@ -20,6 +21,7 @@ export const UsersPage = () => {
 			});
 
 			setUsers(res.data.users);
+			setIsLoading(false);
 		};
 
 		fetchData();
@@ -51,6 +53,7 @@ export const UsersPage = () => {
 				<h1 className="flex justify-center font-extrabold text-6xl mb-5 mt-10 text-shadow-sm/10">
 					Data Users
 				</h1>
+
 				<div className="motion-preset-blur-up-md">
 					<div className="grid grid-cols-2 mb-4">
 						<Link
@@ -94,6 +97,13 @@ export const UsersPage = () => {
 								</tr>
 							</thead>
 							<tbody className="text-center border-b border-zinc-200/20 text-shadow-md/10">
+								<img
+									src="../src/assets/photo/loading.gif"
+									alt="loading"
+									className={`p-5 translate-x-[340%] w-30 ${
+										isLoading ? "block" : "hidden"
+									}`}
+								/>
 								{users.map((user, key) => (
 									<tr key={key}>
 										<td className="p-2 border-r border-b border-zinc-200/20">

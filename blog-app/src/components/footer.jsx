@@ -3,7 +3,7 @@ import { Link } from "react-router";
 
 export const Footer = () => {
 	return (
-		<div className="bg-linear-90 from-zinc-600 to-zinc-800 p-5 grid grid-cols-2 gap-4 inset-shadow-sm inset-shadow-zinc-900/40">
+		<footer className="bg-linear-90 from-zinc-600 to-zinc-800 p-5 grid grid-cols-2 gap-4 inset-shadow-sm inset-shadow-zinc-900/40">
 			<div className="flex items-center m-[30px] ps-[5.5%] w-[200px]">
 				<img src="../src/assets/photo/logoM.png" alt="Logo" />
 			</div>
@@ -45,6 +45,6 @@ export const Footer = () => {
 			<div className="hover:opacity-60 duration-300 col-span-2 text-zinc-50/70 flex justify-center tracking-[0.2px]">
 				&#xA9; {new Date().getFullYear()} Miko Suyasa, All Rights Reserved.
 			</div>
-		</div>
+		</footer>
 	);
 };

@@ -1,5 +1,5 @@
 "use client";
-import { cn } from "../../lib/ui/ab-utils";
+import { cn } from "../../lib/ui/utils";
 import React from "react";
 
 export const AuroraBackground = ({

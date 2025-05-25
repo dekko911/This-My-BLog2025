@@ -5,6 +5,7 @@ import { GuestLayout } from "../layouts/guest";
 
 export const BlogPage = () => {
 	const [blogs, setBlogs] = useState([]);
+	const [isLoading, setIsLoading] = useState(true);
 	//const [search, setSearch] = useState("");
 
 	useEffect(() => {
@@ -13,6 +14,7 @@ export const BlogPage = () => {
 			const res = await axios.get(url);
 
 			setBlogs(res.data.blogs);
+			setIsLoading(false);
 		};
 
 		fetchData();
@@ -24,6 +26,12 @@ export const BlogPage = () => {
 				<h1 className="text-center text-7xl font-bold text-shadow-md/10 mt-14">
 					Blog Page
 				</h1>
+
+				<img
+					src="../src/assets/photo/loading.gif"
+					alt="loading"
+					className={`mx-auto w-30 mt-3 ${isLoading ? "block" : "hidden"}`}
+				/>
 
 				<div className="grid grid-cols-3 gap-y-10 mx-auto w-250 gap-x-5 mb-12">
 					{blogs.map((blog, key) => (

@@ -36,7 +36,7 @@ export const GuestLayout = ({ children }) => {
 				</Link>
 			</Header>
 
-			<div className="text-zinc-50">{children}</div>
+			<main className="text-zinc-50">{children}</main>
 
 			<Footer />
 		</div>

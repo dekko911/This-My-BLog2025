@@ -1,10 +1,8 @@
 import { Link } from "react-router";
 
 export const Header = ({ to, children }) => {
-	// using {...props} ketika menggunakan element yang bersifat memasukkan value seperti input, textarea, dll.
-
 	return (
-		<div className="sticky top-0 z-10 py-3.5 shadow-md/20 bg-white/20 backdrop-blur-lg">
+		<header className="sticky top-0 z-10 py-3.5 shadow-md/20 bg-white/20 backdrop-blur-lg">
 			<div className="container mx-auto flex justify-between items-center px-5">
 				<Link
 					to={to}
@@ -22,6 +20,6 @@ export const Header = ({ to, children }) => {
 					{children}
 				</nav>
 			</div>
-		</div>
+		</header>
 	);
 };

@@ -10,6 +10,7 @@ export const BlogsPage = () => {
 	const hasToken = Cookies.get("token");
 
 	const [blogs, setBlogs] = useState([]);
+	const [isLoading, setIsLoading] = useState(true);
 	const [search, setSearch] = useState("");
 
 	useEffect(() => {
@@ -20,6 +21,7 @@ export const BlogsPage = () => {
 			});
 
 			setBlogs(res.data.blogs);
+			setIsLoading(false);
 		};
 
 		fetchData();
@@ -39,7 +41,7 @@ export const BlogsPage = () => {
 
 				if (res.data) {
 					swalToast("success", `${res.data.status}`, 270);
-					setBlogs((prev) => prev.filter((blog) => blog.id !== id));
+					setBlogs((blogs) => blogs.filter((blog) => blog.id !== id));
 				}
 			}
 		});
@@ -108,6 +110,13 @@ export const BlogsPage = () => {
 								</tr>
 							</thead>
 							<tbody className="text-center">
+								<img
+									src="../src/assets/photo/loading.gif"
+									alt="loading"
+									className={`p-5 translate-x-[405%] w-30 ${
+										isLoading ? "block" : "hidden"
+									}`}
+								/>
 								{blogs.map((blog, key) => (
 									<tr key={key}>
 										<td className="p-2 border-b border-r border-zinc-200/20">

@@ -10,6 +10,7 @@ export const CategoryPage = () => {
 	const hasToken = Cookies.get("token");
 
 	const [categories, setCategories] = useState([]);
+	const [isLoading, setIsLoading] = useState(true);
 	const [search, setSearch] = useState("");
 
 	useEffect(() => {
@@ -20,6 +21,7 @@ export const CategoryPage = () => {
 			});
 
 			setCategories(res.data.categories);
+			setIsLoading(false);
 		};
 
 		fetchData();
@@ -91,6 +93,13 @@ export const CategoryPage = () => {
 								</tr>
 							</thead>
 							<tbody className="text-center">
+								<img
+									src="../src/assets/photo/loading.gif"
+									alt="loading"
+									className={`p-5 translate-x-[280%] w-30 ${
+										isLoading ? "block" : "hidden"
+									}`}
+								/>
 								{categories.map((category, key) => (
 									<tr key={key}>
 										<td className="p-2 border-b border-r border-zinc-200/20">
