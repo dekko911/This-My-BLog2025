@@ -33,6 +33,5 @@ class AuthController extends Controller
             'status' => 'fail',
             'message' => 'The provided credentials does not match with our records.',
         ]);
-
     }
 }

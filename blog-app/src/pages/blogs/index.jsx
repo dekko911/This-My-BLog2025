@@ -21,6 +21,7 @@ export const BlogsPage = () => {
 			});
 
 			setBlogs(res.data.blogs);
+
 			setIsLoading(false);
 		};
 
@@ -41,6 +42,7 @@ export const BlogsPage = () => {
 
 				if (res.data) {
 					swalToast("success", `${res.data.status}`, 270);
+
 					setBlogs((blogs) => blogs.filter((blog) => blog.id !== id));
 				}
 			}
@@ -139,7 +141,7 @@ export const BlogsPage = () => {
 												{blog.slug}
 											</Link>
 										</td>
-										<td className="p-3 border-b border-r border-zinc-200/20 line-clamp-5 text-justify w-[270px] whitespace-pre-wrap">
+										<td className="p-3 border-b border-r border-zinc-200/20 line-clamp-9 text-justify w-[270px] whitespace-pre-wrap">
 											{blog.description}
 										</td>
 										<td className="p-2 border-b border-r border-zinc-200/20 w-29">

@@ -1,13 +1,14 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { AuthLayout } from "../../layouts/auth";
 import { swalDialogConfirm, swalToast } from "../../lib/alert/sweet-alert";
 import Cookies from "js-cookie";
 
 export const UsersPage = () => {
 	const hasToken = Cookies.get("token");
+	const navigate = useNavigate();
 
 	const [users, setUsers] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
@@ -20,12 +21,21 @@ export const UsersPage = () => {
 				headers: { Authorization: `Bearer ${hasToken}` },
 			});
 
+			if (res.data.status === "Role Not Match.") {
+				navigate("/blogs", {
+					preventScrollReset: true,
+					flushSync: true,
+				});
+
+				swalToast("warning", "Oops, Something Wen't Wrong !");
+			}
 			setUsers(res.data.users);
+
 			setIsLoading(false);
 		};
 
 		fetchData();
-	}, [search, hasToken]);
+	}, [search, hasToken, navigate]);
 
 	const handleDelete = (id) => {
 		swalDialogConfirm(

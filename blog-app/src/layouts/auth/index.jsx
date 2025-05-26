@@ -9,14 +9,14 @@ export const AuthLayout = ({ children }) => {
 	const navigate = useNavigate();
 
 	if (!Cookies.get("token") && !Cookies.get("abilities")) {
-		swalToast("warning", "Oops, Something Went Wrong !");
-
 		navigate("/", { preventScrollReset: true, flushSync: true });
+
+		swalToast("warning", "Oops, Something Went Wrong !");
 	}
 
 	return (
 		<div className="bg-linear-90 from-zinc-700 to-zinc-500">
-			<Header to="/users">
+			<Header to="/profile">
 				<Link
 					to="/users"
 					className={`hover:text-pink-500 hover:-mt-1 duration-200 ${
@@ -56,9 +56,9 @@ export const AuthLayout = ({ children }) => {
 						Cookies.remove("name");
 						Cookies.remove("email");
 
-						swalToast("info", "Goodbye !", 240);
-
 						navigate("/", { flushSync: true, preventScrollReset: true });
+
+						swalToast("info", "Goodbye !", 240);
 					}}
 				>
 					Logout

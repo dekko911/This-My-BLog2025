@@ -59,7 +59,7 @@ export const BlogDetail = () => {
 							);
 						}}
 					/>
-					<p className="text-justify text-base/relaxed indent-10 font-lora mt-4 mb-3 text-shadow-md/5 whitespace-pre-wrap">
+					<p className="text-justify text-base/relaxed font-lora mt-4 mb-3 text-shadow-md/5 whitespace-pre-wrap">
 						{blog.description}
 					</p>
 				</article>

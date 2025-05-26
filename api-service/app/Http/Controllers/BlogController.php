@@ -66,7 +66,7 @@ class BlogController extends Controller
             'slug' => ['required'],
             'description' => ['required'],
             'release' => ['required'],
-            'photo' => ['required', 'file', 'mimes:png,jpg'],
+            'photo' => ['required', 'file', 'mimes:png,jpg,webp'],
         ]);
 
         if ($this->file) {
