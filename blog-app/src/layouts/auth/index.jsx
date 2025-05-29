@@ -1,18 +1,21 @@
 import Cookies from "js-cookie";
+import { useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
 import { Footer } from "../../components/footer";
 import { Header } from "../../components/header";
-import { swalToast } from "../../lib/alert/sweet-alert";
+import { swalToast } from "../../lib/sweet-alert";
 
 export const AuthLayout = ({ children }) => {
 	const location = useLocation();
 	const navigate = useNavigate();
 
-	if (!Cookies.get("token") && !Cookies.get("abilities")) {
-		navigate("/", { preventScrollReset: true, flushSync: true });
+	useEffect(() => {
+		if (!Cookies.get("token") && !Cookies.get("abilities")) {
+			navigate("/", { preventScrollReset: true, flushSync: true });
 
-		swalToast("warning", "Oops, Something Went Wrong !");
-	}
+			swalToast("warning", "Oops, Something Went Wrong !");
+		}
+	}, [navigate]);
 
 	return (
 		<div className="bg-linear-90 from-zinc-700 to-zinc-500">

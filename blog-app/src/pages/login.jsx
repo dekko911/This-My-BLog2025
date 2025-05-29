@@ -4,7 +4,7 @@ import { useState } from "react";
 import { FaHome } from "react-icons/fa";
 import { Link, useNavigate } from "react-router";
 import { AuroraBackground } from "../components/ui/aurora-background";
-import { swalToast } from "../lib/alert/sweet-alert";
+import { swalToast } from "../lib/sweet-alert";
 
 export const LoginPage = () => {
 	const navigate = useNavigate();

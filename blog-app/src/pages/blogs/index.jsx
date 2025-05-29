@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { Link } from "react-router";
 import { AuthLayout } from "../../layouts/auth";
-import { swalDialogConfirm, swalToast } from "../../lib/alert/sweet-alert";
+import { swalDialogConfirm, swalToast } from "../../lib/sweet-alert";
 
 export const BlogsPage = () => {
 	const hasToken = Cookies.get("token");

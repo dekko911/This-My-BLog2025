@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { Link, useNavigate } from "react-router";
 import { AuthLayout } from "../../layouts/auth";
-import { swalDialogConfirm, swalToast } from "../../lib/alert/sweet-alert";
+import { swalDialogConfirm, swalToast } from "../../lib/sweet-alert";
 import Cookies from "js-cookie";
 
 export const UsersPage = () => {

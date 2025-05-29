@@ -3,7 +3,7 @@ import { AuthLayout } from "../../layouts/auth";
 import { useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { swalToast } from "../../lib/alert/sweet-alert";
+import { swalToast } from "../../lib/sweet-alert";
 
 export const CreateRolePage = () => {
 	const hasToken = Cookies.get("token");

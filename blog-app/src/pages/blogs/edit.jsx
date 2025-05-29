@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { AuthLayout } from "../../layouts/auth";
-import { swalToast } from "../../lib/alert/sweet-alert";
+import { swalToast } from "../../lib/sweet-alert";
 
 export const EditBlogPage = () => {
 	const hasToken = Cookies.get("token");
