@@ -11,7 +11,7 @@ export const AuthLayout = ({ children }) => {
 
 	useEffect(() => {
 		if (!Cookies.get("token") && !Cookies.get("abilities")) {
-			navigate("/", { preventScrollReset: true, flushSync: true });
+			navigate("/", { preventScrollReset: true });
 
 			swalToast("warning", "Oops, Something Went Wrong !");
 		}
@@ -59,7 +59,7 @@ export const AuthLayout = ({ children }) => {
 						Cookies.remove("name");
 						Cookies.remove("email");
 
-						navigate("/", { flushSync: true, preventScrollReset: true });
+						navigate("/", { preventScrollReset: true });
 
 						swalToast("info", "Goodbye !", 240);
 					}}

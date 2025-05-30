@@ -23,7 +23,7 @@ export const BlogDetails = () => {
 		};
 
 		fetchData();
-	}, [params.slug, hasToken]);
+	}, [params.slug, hasToken, isLoading]);
 
 	if (isLoading) {
 		return (

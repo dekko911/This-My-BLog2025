@@ -25,7 +25,7 @@ export const CategoryPage = () => {
 		};
 
 		fetchData();
-	}, [search, hasToken]);
+	}, [search, hasToken, isLoading]);
 
 	const handleDelete = (id) => {
 		swalDialogConfirm(

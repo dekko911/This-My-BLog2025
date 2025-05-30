@@ -18,7 +18,7 @@ export const BlogPage = () => {
 		};
 
 		fetchData();
-	}, []);
+	}, [isLoading]);
 
 	return (
 		<GuestLayout>

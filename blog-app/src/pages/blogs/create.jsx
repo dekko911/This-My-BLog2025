@@ -36,8 +36,8 @@ export const CreateBlogsPage = () => {
 			});
 
 			if (res.data) {
-				navigate(-1, { flushSync: true });
 				swalToast("success", `${res.data.message}`, 360);
+				navigate(-1);
 			}
 		} catch (error) {
 			if (error.response.data.line === 817) {

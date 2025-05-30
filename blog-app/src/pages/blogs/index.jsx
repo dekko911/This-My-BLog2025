@@ -26,7 +26,7 @@ export const BlogsPage = () => {
 		};
 
 		fetchData();
-	}, [search, hasToken]);
+	}, [search, hasToken, isLoading]);
 
 	const handleDelete = (id) => {
 		swalDialogConfirm(

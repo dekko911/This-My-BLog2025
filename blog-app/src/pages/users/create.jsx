@@ -25,7 +25,7 @@ export const CreateUserPage = () => {
 			if (res.data) {
 				swalToast("success", `${res.data.message}`, 300);
 
-				navigate(-1, { flushSync: true }); // -1 balik sekali, -2 balik dua kali, -3 balik tiga kali ke halaman sebelumnya
+				navigate(-1); // -1 balik sekali, -2 balik dua kali, -3 balik tiga kali ke halaman sebelumnya
 			}
 		} catch (error) {
 			if (error.response.data.line === 817) {

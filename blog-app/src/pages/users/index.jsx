@@ -1,10 +1,10 @@
 import axios from "axios";
+import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { Link, useNavigate } from "react-router";
 import { AuthLayout } from "../../layouts/auth";
 import { swalDialogConfirm, swalToast } from "../../lib/sweet-alert";
-import Cookies from "js-cookie";
 
 export const UsersPage = () => {
 	const hasToken = Cookies.get("token");
@@ -24,7 +24,6 @@ export const UsersPage = () => {
 			if (res.data.status === "Role Not Match.") {
 				navigate("/blogs", {
 					preventScrollReset: true,
-					flushSync: true,
 				});
 
 				swalToast("warning", "Oops, Something Wen't Wrong !");
@@ -35,7 +34,7 @@ export const UsersPage = () => {
 		};
 
 		fetchData();
-	}, [search, hasToken, navigate]);
+	}, [search, hasToken, navigate, isLoading]);
 
 	const handleDelete = (id) => {
 		swalDialogConfirm(

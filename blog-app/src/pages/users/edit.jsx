@@ -39,7 +39,7 @@ export const EditUserPage = () => {
 
 			if (res.data) {
 				swalToast("success", `${res.data.message}`, 360);
-				navigate(-1, { flushSync: true });
+				navigate(-1);
 			}
 		} catch (error) {
 			if (error.status === 422) {

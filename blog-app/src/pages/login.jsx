@@ -33,22 +33,20 @@ export const LoginPage = () => {
 					Cookies.set("name", name);
 					Cookies.set("email", email);
 
-					swalToast("success", `Welcome, ${res.data.user.name} !`, 300);
-
 					if (abilities == "admin") {
-						navigate("/users", { flushSync: true });
+						navigate("/users", { preventScrollReset: true });
 					} else {
-						navigate("/blogs", { flushSync: true });
+						navigate("/blogs", { preventScrollReset: true });
 					}
+
+					swalToast("success", `Welcome, ${res.data.user.name} !`, 300);
 				}
 
 				if (res.data.status && res.data.status === "fail") {
-					swalToast("warning", `${res.data.message}`);
+					swalToast("warning", `${res.data.message}`, 368);
 				}
 			}
 		} catch (error) {
-			console.error(error);
-
 			if (error.status === 422) {
 				setValidationError(error.response.data.errors);
 			}

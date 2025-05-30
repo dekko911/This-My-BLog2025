@@ -25,7 +25,7 @@ export const RolesPage = () => {
 		};
 
 		fetchRoles();
-	}, [search, hasToken]);
+	}, [search, hasToken, isLoading]);
 
 	const handleDelete = (id) => {
 		swalDialogConfirm(

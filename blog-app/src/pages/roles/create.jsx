@@ -47,7 +47,7 @@ export const CreateRolePage = () => {
 			if (res.data) {
 				swalToast("success", `${res.data.message}`, 350);
 
-				navigate(-1, { flushSync: true });
+				navigate(-1);
 			}
 		} catch (error) {
 			//console.error(error);

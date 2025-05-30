@@ -1,6 +1,6 @@
 import Swal from "sweetalert2";
 
-export const swalToast = (icon = "", title = "", width = 410) => {
+export const swalToast = (icon = "", title = "", width = 405) => {
 	const Toast = Swal.mixin({
 		toast: true,
 		position: "top-end",

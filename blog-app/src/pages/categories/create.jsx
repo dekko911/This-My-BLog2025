@@ -25,7 +25,7 @@ export const CreateCategoryPage = () => {
 
 			if (res.data) {
 				swalToast("success", `${res.data.message}`, 390);
-				navigate(-1, { flushSync: true });
+				navigate(-1);
 			}
 		} catch (error) {
 			if (error.response.data.line === 817) {
