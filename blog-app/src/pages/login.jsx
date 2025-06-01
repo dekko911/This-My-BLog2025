@@ -1,6 +1,6 @@
 import axios from "axios";
 import Cookies from "js-cookie";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { FaHome } from "react-icons/fa";
 import { Link, useNavigate } from "react-router";
 import { AuroraBackground } from "../components/ui/aurora-background";
@@ -12,46 +12,49 @@ export const LoginPage = () => {
 	const [form, setForm] = useState({});
 	const [validationError, setValidationError] = useState([]);
 
-	const handleLogin = async (e) => {
-		e.preventDefault();
+	const handleLogin = useCallback(
+		async (e) => {
+			e.preventDefault();
 
-		try {
-			const url = "http://localhost:8000/api/login";
-			const res = await axios.post(url, form);
+			try {
+				const url = "http://localhost:8000/api/login";
+				const res = await axios.post(url, form);
 
-			if (res.data) {
-				if (res.data.status && res.data.status === "success") {
-					const plainTextToken = res.data.token.plainTextToken;
-					const token = plainTextToken.split("|")[1];
+				if (res.data) {
+					if (res.data.status && res.data.status === "success") {
+						const plainTextToken = res.data.token.plainTextToken;
+						const token = plainTextToken.split("|")[1];
 
-					const abilities = res.data.token.accessToken.abilities;
-					const name = res.data.token.accessToken.name;
-					const email = res.data.user.email;
+						const abilities = res.data.token.accessToken.abilities;
+						const name = res.data.token.accessToken.name;
+						const email = res.data.user.email;
 
-					Cookies.set("token", token);
-					Cookies.set("abilities", abilities);
-					Cookies.set("name", name);
-					Cookies.set("email", email);
+						Cookies.set("token", token);
+						Cookies.set("abilities", abilities);
+						Cookies.set("name", name);
+						Cookies.set("email", email);
 
-					if (abilities == "admin") {
-						navigate("/users", { preventScrollReset: true });
-					} else {
-						navigate("/blogs", { preventScrollReset: true });
+						if (abilities == "admin") {
+							navigate("/users", { preventScrollReset: true });
+						} else {
+							navigate("/blogs", { preventScrollReset: true });
+						}
+
+						swalToast("success", `Welcome, ${res.data.user.name} !`, 300);
 					}
 
-					swalToast("success", `Welcome, ${res.data.user.name} !`, 300);
+					if (res.data.status && res.data.status === "fail") {
+						swalToast("warning", `${res.data.message}`, 368);
+					}
 				}
-
-				if (res.data.status && res.data.status === "fail") {
-					swalToast("warning", `${res.data.message}`, 368);
+			} catch (error) {
+				if (error.status === 422) {
+					setValidationError(error.response.data.errors);
 				}
 			}
-		} catch (error) {
-			if (error.status === 422) {
-				setValidationError(error.response.data.errors);
-			}
-		}
-	};
+		},
+		[form, navigate]
+	);
 
 	return (
 		<AuroraBackground showRadialGradient={false}>

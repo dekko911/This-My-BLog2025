@@ -1,6 +1,6 @@
 import axios from "axios";
 import Cookies from "js-cookie";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useNavigate } from "react-router";
 import { AuthLayout } from "../../layouts/auth";
 import { swalToast } from "../../lib/sweet-alert";
@@ -13,30 +13,33 @@ export const CreateCategoryPage = () => {
 	const [form, setForm] = useState({});
 	const [validationError, setValidationError] = useState([]);
 
-	const handleSubmit = async (e) => {
-		e.preventDefault();
+	const handleSubmit = useCallback(
+		async (e) => {
+			e.preventDefault();
 
-		const url = "http://localhost:8000/api/categories";
+			const url = "http://localhost:8000/api/categories";
 
-		try {
-			const res = await axios.post(url, form, {
-				headers: { Authorization: `Bearer ${hasToken}` },
-			});
+			try {
+				const res = await axios.post(url, form, {
+					headers: { Authorization: `Bearer ${hasToken}` },
+				});
 
-			if (res.data) {
-				swalToast("success", `${res.data.message}`, 390);
-				navigate(-1);
+				if (res.data) {
+					swalToast("success", `${res.data.message}`, 390);
+					navigate(-1);
+				}
+			} catch (error) {
+				if (error.response.data.line === 817) {
+					swalToast("error", "Duplicate Data !", 290);
+				}
+
+				if (error.status === 422) {
+					setValidationError(error.response.data.errors);
+				}
 			}
-		} catch (error) {
-			if (error.response.data.line === 817) {
-				swalToast("error", "Duplicate Data !", 290);
-			}
-
-			if (error.status === 422) {
-				setValidationError(error.response.data.errors);
-			}
-		}
-	};
+		},
+		[form, hasToken, navigate]
+	);
 
 	return (
 		<AuthLayout>

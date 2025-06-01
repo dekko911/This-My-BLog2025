@@ -5,6 +5,7 @@ import { AuthLayout } from "../../layouts/auth";
 import { Link } from "react-router";
 import { FaPlus } from "react-icons/fa";
 import { swalDialogConfirm, swalToast } from "../../lib/sweet-alert";
+import { createPortal } from "react-dom";
 
 export const RolesPage = () => {
 	const hasToken = Cookies.get("token");
@@ -49,7 +50,17 @@ export const RolesPage = () => {
 
 	return (
 		<AuthLayout>
-			<div className="grid justify-center gap-y-6">
+			<div className="grid justify-center gap-y-6 relative">
+				{createPortal(
+					<img
+						src="../src/assets/photo/loading.gif"
+						alt="loading"
+						className={`p-11 absolute top-50 right-138 w-30 motion-preset-blur-up-md ${
+							isLoading ? "block" : "hidden"
+						}`}
+					/>,
+					document.body
+				)}
 				<h1 className="text-center font-bold text-7xl text-shadow-md/10 mt-9">
 					Data Roles
 				</h1>
@@ -90,13 +101,6 @@ export const RolesPage = () => {
 							</tr>
 						</thead>
 						<tbody className="text-center">
-							<img
-								src="../src/assets/photo/loading.gif"
-								alt="loading"
-								className={`p-5 translate-x-[290%] w-30 ${
-									isLoading ? "block" : "hidden"
-								}`}
-							/>
 							{roles.map((role, key) => (
 								<tr key={key}>
 									<td className="p-2 border-b border-r border-zinc-200/20">

@@ -1,6 +1,6 @@
 import axios from "axios";
 import Cookies from "js-cookie";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { AuthLayout } from "../../layouts/auth";
 import { swalToast } from "../../lib/sweet-alert";
@@ -27,30 +27,33 @@ export const EditUserPage = () => {
 		fetchUser();
 	}, [params.id, hasToken]);
 
-	const handleSubmit = async (e) => {
-		e.preventDefault();
+	const handleSubmit = useCallback(
+		async (e) => {
+			e.preventDefault();
 
-		const url = `http://localhost:8000/api/users/${params.id}`;
+			const url = `http://localhost:8000/api/users/${params.id}`;
 
-		try {
-			const res = await axios.patch(url, user, {
-				headers: { Authorization: `Bearer ${hasToken}` },
-			});
+			try {
+				const res = await axios.patch(url, user, {
+					headers: { Authorization: `Bearer ${hasToken}` },
+				});
 
-			if (res.data) {
-				swalToast("success", `${res.data.message}`, 360);
-				navigate(-1);
+				if (res.data) {
+					swalToast("success", `${res.data.message}`, 360);
+					navigate(-1);
+				}
+			} catch (error) {
+				if (error.status === 422) {
+					setValidationError(error.response.data.errors);
+				}
+
+				if (error.response.status === 500) {
+					swalToast("warning", `${error.response.data.message}`, 365);
+				}
 			}
-		} catch (error) {
-			if (error.status === 422) {
-				setValidationError(error.response.data.errors);
-			}
-
-			if (error.response.status === 500) {
-				swalToast("warning", `${error.response.data.message}`, 365);
-			}
-		}
-	};
+		},
+		[hasToken, navigate, params.id, user]
+	);
 
 	return (
 		<AuthLayout>

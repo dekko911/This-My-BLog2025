@@ -1,6 +1,6 @@
 import axios from "axios";
 import Cookies from "js-cookie";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { AuthLayout } from "../../layouts/auth";
 import { swalToast } from "../../lib/sweet-alert";
@@ -15,40 +15,53 @@ export const CreateBlogsPage = () => {
 	const [userSelect, setUserSelect] = useState([]);
 	const [categorySelect, setCategorySelect] = useState([]);
 
-	const handleSubmit = async (e) => {
-		e.preventDefault();
+	const handleSubmit = useCallback(
+		async (e) => {
+			e.preventDefault();
 
-		const url = "http://localhost:8000/api/blogs";
+			const url = "http://localhost:8000/api/blogs";
 
-		const formData = new FormData();
+			const formData = new FormData();
 
-		form.user_id && formData.append("user_id", form.user_id);
-		form.category_id && formData.append("category_id", form.category_id);
-		form.title && formData.append("title", form.title);
-		form.slug && formData.append("slug", form.slug);
-		form.description && formData.append("description", form.description);
-		form.release && formData.append("release", form.release);
-		form.photo && formData.append("photo", form.photo);
+			form.user_id && formData.append("user_id", form.user_id);
+			form.category_id && formData.append("category_id", form.category_id);
+			form.title && formData.append("title", form.title);
+			form.slug && formData.append("slug", form.slug);
+			form.description && formData.append("description", form.description);
+			form.release && formData.append("release", form.release);
+			form.photo && formData.append("photo", form.photo);
 
-		try {
-			const res = await axios.post(url, formData, {
-				headers: { Authorization: `Bearer ${hasToken}` },
-			});
+			try {
+				const res = await axios.post(url, formData, {
+					headers: { Authorization: `Bearer ${hasToken}` },
+				});
 
-			if (res.data) {
-				swalToast("success", `${res.data.message}`, 360);
-				navigate(-1);
+				if (res.data) {
+					swalToast("success", `${res.data.message}`, 360);
+					navigate(-1);
+				}
+			} catch (error) {
+				if (error.response.data.line === 817) {
+					swalToast("error", "Duplicate Data Blog !", 320);
+				}
+
+				if (error.status === 422) {
+					setValidationError(error.response.data.errors);
+				}
 			}
-		} catch (error) {
-			if (error.response.data.line === 817) {
-				swalToast("error", "Duplicate Data Blog !", 320);
-			}
-
-			if (error.status === 422) {
-				setValidationError(error.response.data.errors);
-			}
-		}
-	};
+		},
+		[
+			form.category_id,
+			form.description,
+			form.photo,
+			form.release,
+			form.slug,
+			form.title,
+			form.user_id,
+			hasToken,
+			navigate,
+		]
+	);
 
 	useEffect(() => {
 		const fetchUsers = async () => {

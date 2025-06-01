@@ -1,6 +1,6 @@
 import axios from "axios";
 import Cookies from "js-cookie";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useNavigate } from "react-router";
 import { AuthLayout } from "../../layouts/auth";
 import { swalToast } from "../../lib/sweet-alert";
@@ -12,31 +12,34 @@ export const CreateUserPage = () => {
 	const [form, setForm] = useState({});
 	const [validationError, setValidationError] = useState([]);
 
-	const handleSubmit = async (e) => {
-		e.preventDefault();
+	const handleSubmit = useCallback(
+		async (e) => {
+			e.preventDefault();
 
-		const url = "http://localhost:8000/api/users";
+			const url = "http://localhost:8000/api/users";
 
-		try {
-			const res = await axios.post(url, form, {
-				headers: { Authorization: `Bearer ${hasToken}` },
-			});
+			try {
+				const res = await axios.post(url, form, {
+					headers: { Authorization: `Bearer ${hasToken}` },
+				});
 
-			if (res.data) {
-				swalToast("success", `${res.data.message}`, 300);
+				if (res.data) {
+					swalToast("success", `${res.data.message}`, 300);
 
-				navigate(-1); // -1 balik sekali, -2 balik dua kali, -3 balik tiga kali ke halaman sebelumnya
+					navigate(-1); // -1 balik sekali, -2 balik dua kali, -3 balik tiga kali ke halaman sebelumnya
+				}
+			} catch (error) {
+				if (error.response.data.line === 817) {
+					swalToast("error", "Duplicate Data User !", 320);
+				}
+
+				if (error.status === 422) {
+					setValidationError(error.response.data.errors);
+				}
 			}
-		} catch (error) {
-			if (error.response.data.line === 817) {
-				swalToast("error", "Duplicate Data User !", 320);
-			}
-
-			if (error.status === 422) {
-				setValidationError(error.response.data.errors);
-			}
-		}
-	};
+		},
+		[form, hasToken, navigate]
+	);
 
 	return (
 		<AuthLayout>

@@ -5,6 +5,7 @@ import { FaPlus } from "react-icons/fa";
 import { Link } from "react-router";
 import { AuthLayout } from "../../layouts/auth";
 import { swalDialogConfirm, swalToast } from "../../lib/sweet-alert";
+import { createPortal } from "react-dom";
 
 export const BlogsPage = () => {
 	const hasToken = Cookies.get("token");
@@ -51,7 +52,17 @@ export const BlogsPage = () => {
 
 	return (
 		<AuthLayout>
-			<div className="grid gap-y-3 justify-center">
+			<div className="grid gap-y-3 justify-center relative">
+				{createPortal(
+					<img
+						src="../src/assets/photo/loading.gif"
+						alt="loading"
+						className={`p-11 absolute top-45 right-92 w-30 motion-preset-blur-up-md ${
+							isLoading ? "block" : "hidden"
+						}`}
+					/>,
+					document.body
+				)}
 				<h1 className="font-extrabold text-6xl mt-10 text-center tracking-wide mb-[5vh]">
 					Data Blogs
 				</h1>
@@ -112,13 +123,6 @@ export const BlogsPage = () => {
 								</tr>
 							</thead>
 							<tbody className="text-center">
-								<img
-									src="../src/assets/photo/loading.gif"
-									alt="loading"
-									className={`p-5 translate-x-[405%] w-30 ${
-										isLoading ? "block" : "hidden"
-									}`}
-								/>
 								{blogs.map((blog, key) => (
 									<tr key={key}>
 										<td className="p-2 border-b border-r border-zinc-200/20">

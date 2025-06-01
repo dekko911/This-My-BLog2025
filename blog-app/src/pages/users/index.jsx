@@ -5,6 +5,7 @@ import { FaPlus } from "react-icons/fa";
 import { Link, useNavigate } from "react-router";
 import { AuthLayout } from "../../layouts/auth";
 import { swalDialogConfirm, swalToast } from "../../lib/sweet-alert";
+import { createPortal } from "react-dom";
 
 export const UsersPage = () => {
 	const hasToken = Cookies.get("token");
@@ -58,7 +59,17 @@ export const UsersPage = () => {
 
 	return (
 		<AuthLayout>
-			<div className="grid gap-y-3 justify-center">
+			<div className="grid gap-y-3 justify-center relative">
+				{createPortal(
+					<img
+						src="../src/assets/photo/loading.gif"
+						alt="loading"
+						className={`p-11 absolute top-42 right-110 w-30 motion-preset-blur-up-md ${
+							isLoading ? "block" : "hidden"
+						}`}
+					/>,
+					document.body
+				)}
 				<h1 className="flex justify-center font-extrabold text-6xl mb-5 mt-10 text-shadow-sm/10">
 					Data Users
 				</h1>
@@ -106,13 +117,6 @@ export const UsersPage = () => {
 								</tr>
 							</thead>
 							<tbody className="text-center border-b border-zinc-200/20 text-shadow-md/10">
-								<img
-									src="../src/assets/photo/loading.gif"
-									alt="loading"
-									className={`p-5 translate-x-[340%] w-30 ${
-										isLoading ? "block" : "hidden"
-									}`}
-								/>
 								{users.map((user, key) => (
 									<tr key={key}>
 										<td className="p-2 border-r border-b border-zinc-200/20">

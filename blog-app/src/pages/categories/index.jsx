@@ -5,6 +5,7 @@ import { FaPlus } from "react-icons/fa";
 import { Link } from "react-router";
 import { AuthLayout } from "../../layouts/auth";
 import { swalDialogConfirm, swalToast } from "../../lib/sweet-alert";
+import { createPortal } from "react-dom";
 
 export const CategoryPage = () => {
 	const hasToken = Cookies.get("token");
@@ -51,7 +52,17 @@ export const CategoryPage = () => {
 
 	return (
 		<AuthLayout>
-			<div className="grid justify-center gap-y-4">
+			<div className="grid justify-center gap-y-4 relative">
+				{createPortal(
+					<img
+						src="../src/assets/photo/loading.gif"
+						alt="loading"
+						className={`absolute p-11 top-48 right-137 w-30 motion-preset-blur-up-md ${
+							isLoading ? "block" : "hidden"
+						}`}
+					/>,
+					document.body
+				)}
 				<h1 className="text-center font-bold text-7xl text-shadow-md/10 mt-9">
 					Data Categories
 				</h1>
@@ -93,13 +104,6 @@ export const CategoryPage = () => {
 								</tr>
 							</thead>
 							<tbody className="text-center">
-								<img
-									src="../src/assets/photo/loading.gif"
-									alt="loading"
-									className={`p-5 translate-x-[280%] w-30 ${
-										isLoading ? "block" : "hidden"
-									}`}
-								/>
 								{categories.map((category, key) => (
 									<tr key={key}>
 										<td className="p-2 border-b border-r border-zinc-200/20">

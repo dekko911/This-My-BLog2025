@@ -1,8 +1,8 @@
-import Cookies from "js-cookie";
-import { AuthLayout } from "../../layouts/auth";
-import { useNavigate } from "react-router";
-import { useEffect, useState } from "react";
 import axios from "axios";
+import Cookies from "js-cookie";
+import { useCallback, useEffect, useState } from "react";
+import { useNavigate } from "react-router";
+import { AuthLayout } from "../../layouts/auth";
 import { swalToast } from "../../lib/sweet-alert";
 
 export const CreateRolePage = () => {
@@ -34,37 +34,40 @@ export const CreateRolePage = () => {
 		fetchUsers();
 	}, [hasToken]);
 
-	const handleSubmit = async (e) => {
-		e.preventDefault();
+	const handleSubmit = useCallback(
+		async (e) => {
+			e.preventDefault();
 
-		const url = "http://localhost:8000/api/roles";
+			const url = "http://localhost:8000/api/roles";
 
-		try {
-			const res = await axios.post(url, form, {
-				headers: { Authorization: `Bearer ${hasToken}` },
-			});
+			try {
+				const res = await axios.post(url, form, {
+					headers: { Authorization: `Bearer ${hasToken}` },
+				});
 
-			if (res.data) {
-				swalToast("success", `${res.data.message}`, 350);
+				if (res.data) {
+					swalToast("success", `${res.data.message}`, 350);
 
-				navigate(-1);
+					navigate(-1);
+				}
+			} catch (error) {
+				//console.error(error);
+
+				if (error.status === 500) {
+					swalToast("warning", `${error.response.data.message}`, 350);
+				}
+
+				if (error.status === 422) {
+					setValidationError(error.response.data.errors);
+				}
+
+				if (error.response.data.line === 817) {
+					swalToast("error", "Duplicate Role !", 280);
+				}
 			}
-		} catch (error) {
-			//console.error(error);
-
-			if (error.status === 500) {
-				swalToast("warning", `${error.response.data.message}`, 350);
-			}
-
-			if (error.status === 422) {
-				setValidationError(error.response.data.errors);
-			}
-
-			if (error.response.data.line === 817) {
-				swalToast("error", "Duplicate Role !", 280);
-			}
-		}
-	};
+		},
+		[form, hasToken, navigate]
+	);
 
 	return (
 		<AuthLayout>
