@@ -26,7 +26,7 @@ export const CreateCategoryPage = () => {
 
 				if (res.data) {
 					swalToast("success", `${res.data.message}`, 390);
-					navigate(-1);
+					navigate("/categories");
 				}
 			} catch (error) {
 				if (error.response.data.line === 817) {

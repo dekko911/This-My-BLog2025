@@ -41,7 +41,7 @@ class RoleController extends Controller
         ]);
 
         if ($request->name == 'admin') {
-            throw new \Exception("Can't Add Admin Twice !");
+            throw new \Exception("Can't Add Admin !");
         }
 
         $role = Role::create($validated);

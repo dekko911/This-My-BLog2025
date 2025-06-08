@@ -10,20 +10,26 @@ export const Profile = () => {
 	return (
 		<AuthLayout>
 			<AuroraBackground showRadialGradient={false}>
-				<div className="block mx-auto p-3 bg-white/15 gap-3 rounded-md w-100 mt-30 mb-40 z-[1] shadow-md/10 motion-preset-blur-up-md">
-					<h1 className="text-center text-blue-500">
-						Name : <span className="text-red-500">{hasName}</span>
-					</h1>
-					<h1 className="text-center text-pink-500">
-						Email : <span className="text-yellow-500">{hasEmail}</span>
-					</h1>
-					<h1 className="text-center text-white">
-						Role : <span className="text-green-500">{hasAbilities}</span>
-					</h1>
+				<div className="flex justify-between p-3 text-white bg-white/15 gap-3 rounded-md w-110 mt-30 mb-40 z-[1] shadow-md/10 motion-preset-blur-up-md">
+					<div className="flex flex-col gap-y-3 justify-center ps-2">
+						<h1 className="capitalize">
+							Name : <span>{hasName}</span>
+						</h1>
+						<h1>
+							Email : <span>{hasEmail}</span>
+						</h1>
+						<h1 className="capitalize">
+							Role : <span>{hasAbilities}</span>
+						</h1>
+					</div>
 
-					<h1 className="font-bold text-3xl text-center mt-5 text-white">
-						*Nanti Akan Di Develop
-					</h1>
+					<div className="p-5">
+						<img
+							src="/src/assets/photo/profile.png"
+							alt="profile"
+							className="w-30"
+						/>
+					</div>
 				</div>
 			</AuroraBackground>
 		</AuthLayout>

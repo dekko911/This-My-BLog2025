@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Blog;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -23,7 +24,7 @@ class BlogController extends Controller
 
     public function index()
     {
-        $blogs = Blog::latest()->with(['user', 'category'])->where(function ($i) {
+        $blogs = Blog::latest('created_at')->with(['user', 'category'])->where(function ($i) {
             if ($this->search) {
                 return $i->where('title', 'like', "%$this->search%")
                     ->orWhere('slug', 'like', "%$this->search%")
@@ -60,7 +61,6 @@ class BlogController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'user_id' => ['required'],
             'category_id' => ['required'],
             'title' => ['required'],
             'slug' => ['required'],
@@ -76,8 +76,14 @@ class BlogController extends Controller
             $this->file->storeAs('blogs/photo', $file_name, 'public');
         }
 
+        // get the authenticated user where the ID is.
+        $user_id = Auth::id();
+
+        // boleh juga pakai yg ini.
+        // $user_id = $request->user()->id;
+
         $blog = Blog::create([
-            'user_id' => $request->user_id,
+            'user_id' => $user_id,
             'category_id' => $request->category_id,
             'title' => $request->title,
             'slug' => $request->slug,
@@ -132,7 +138,7 @@ class BlogController extends Controller
     public function destroy(Blog $blog)
     {
         if ($blog->photo) {
-            Storage::delete('blogs/photo/' . $blog->photo);
+            Storage::delete("blogs/photo/$blog->photo");
         }
 
         Blog::destroy($blog->id);

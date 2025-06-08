@@ -11,10 +11,12 @@ export const LoginPage = () => {
 
 	const [form, setForm] = useState({});
 	const [validationError, setValidationError] = useState([]);
+	const [isLoading, setIsLoading] = useState(false);
 
 	const handleLogin = useCallback(
 		async (e) => {
 			e.preventDefault();
+			setIsLoading(true);
 
 			try {
 				const url = "http://localhost:8000/api/login";
@@ -25,14 +27,17 @@ export const LoginPage = () => {
 						const plainTextToken = res.data.token.plainTextToken;
 						const token = plainTextToken.split("|")[1];
 
+						const id = res.data.user.id;
 						const abilities = res.data.token.accessToken.abilities;
 						const name = res.data.token.accessToken.name;
 						const email = res.data.user.email;
 
+						Cookies.set("id", id);
 						Cookies.set("token", token);
 						Cookies.set("abilities", abilities);
 						Cookies.set("name", name);
 						Cookies.set("email", email);
+						setIsLoading(false);
 
 						if (abilities == "admin") {
 							navigate("/users", { preventScrollReset: true });
@@ -44,11 +49,13 @@ export const LoginPage = () => {
 					}
 
 					if (res.data.status && res.data.status === "fail") {
+						setIsLoading(false);
 						swalToast("warning", `${res.data.message}`, 368);
 					}
 				}
 			} catch (error) {
 				if (error.status === 422) {
+					setIsLoading(false);
 					setValidationError(error.response.data.errors);
 				}
 			}
@@ -58,8 +65,19 @@ export const LoginPage = () => {
 
 	return (
 		<AuroraBackground showRadialGradient={false}>
-			<div className="w-110 bg-white/10 p-5 rounded-lg shadow-md/10 backdrop-blur-md motion-preset-blur-down">
+			<div className="relative w-110 bg-white/10 p-5 rounded-lg shadow-md/10 backdrop-blur-md motion-preset-blur-down">
 				<form onSubmit={handleLogin}>
+					<div
+						className={`absolute bottom-7 right-36 ${
+							isLoading ? "block" : "hidden"
+						}`}
+					>
+						<img
+							src="/src/assets/photo/loading.gif"
+							alt="Loading..."
+							className="w-6"
+						/>
+					</div>
 					<Link to="/">
 						<FaHome className="mx-1 scale-150 text-white hover:rotate-[5deg] hover:translate-x-2 hover:text-zinc-400 duration-300" />
 					</Link>

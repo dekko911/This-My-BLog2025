@@ -7,12 +7,14 @@ import { swalToast } from "../../lib/sweet-alert";
 
 export const CreateBlogsPage = () => {
 	const hasToken = Cookies.get("token");
+	const hasId = Cookies.get("id");
+	const hasName = Cookies.get("name");
 
 	const navigate = useNavigate();
 
 	const [form, setForm] = useState({});
 	const [validationError, setValidationError] = useState([]);
-	const [userSelect, setUserSelect] = useState([]);
+	// const [userSelect, setUserSelect] = useState([]);
 	const [categorySelect, setCategorySelect] = useState([]);
 
 	const handleSubmit = useCallback(
@@ -38,7 +40,7 @@ export const CreateBlogsPage = () => {
 
 				if (res.data) {
 					swalToast("success", `${res.data.message}`, 360);
-					navigate(-1);
+					navigate("/blogs");
 				}
 			} catch (error) {
 				if (error.response.data.line === 817) {
@@ -63,30 +65,30 @@ export const CreateBlogsPage = () => {
 		]
 	);
 
-	useEffect(() => {
-		const fetchUsers = async () => {
-			const url = "http://localhost:8000/api/user";
-			const res = await axios.get(url, {
-				headers: { Authorization: `Bearer ${hasToken}` },
-			});
+	// useEffect(() => {
+	// 	const fetchUsers = async () => {
+	// 		const url = "http://localhost:8000/api/user";
+	// 		const res = await axios.get(url, {
+	// 			headers: { Authorization: `Bearer ${hasToken}` },
+	// 		});
 
-			const results = [];
-			res.data.users.forEach((data) => {
-				results.push({
-					key: data.name,
-					value: data.id,
-				});
-			});
+	// 		const results = [];
+	// 		res.data.users.forEach((data) => {
+	// 			results.push({
+	// 				key: data.name,
+	// 				value: data.id,
+	// 			});
+	// 		});
 
-			setUserSelect(
-				[{ key: "Select a User", value: "" }, ...results].filter(
-					(user) => user.value !== 1 //skip id no 1 || show only id no 1 if operator === like this
-				)
-			);
-		};
+	// 		setUserSelect(
+	// 			[{ key: "Select a User", value: "" }, ...results].filter(
+	// 				(user) => user.value !== 1 //skip id no 1 || show only id no 1 if operator === like this
+	// 			)
+	// 		);
+	// 	};
 
-		fetchUsers();
-	}, [hasToken]);
+	// 	fetchUsers();
+	// }, [hasToken]);
 
 	useEffect(() => {
 		const fetchCategories = async () => {
@@ -123,8 +125,9 @@ export const CreateBlogsPage = () => {
 					>
 						<label htmlFor="">Author :</label>
 						<select
-							className="block w-130 rounded-md my-2 p-2 focus:outline-0 text-zinc-800 bg-white"
+							className="block w-130 rounded-md my-2 p-2 focus:outline-0 text-zinc-800 bg-white/50"
 							name="user_id"
+							defaultValue={hasId}
 							onChange={(e) => {
 								const userValue = e.target.value;
 
@@ -132,20 +135,12 @@ export const CreateBlogsPage = () => {
 									return { ...prev, [e.target.name]: userValue };
 								});
 							}}
+							disabled
 						>
-							{userSelect.map((user) => {
-								return (
-									<option key={user.value} value={user.value}>
-										{user.key}
-									</option>
-								);
-							})}
+							<option key={hasId} value={hasId}>
+								{hasName}
+							</option>
 						</select>
-						{validationError.user_id && (
-							<span className="text-red-600 block">
-								{validationError.user_id}
-							</span>
-						)}
 
 						<label htmlFor="">Category :</label>
 						<select

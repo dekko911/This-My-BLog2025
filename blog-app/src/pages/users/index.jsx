@@ -43,15 +43,23 @@ export const UsersPage = () => {
 			"Are You Sure Delete This User ?",
 			"info"
 		).then(async (res) => {
-			if (res.isConfirmed) {
-				const url = `http://localhost:8000/api/users/${id}`;
-				const res = await axios.delete(url, {
-					headers: { Authorization: `Bearer ${hasToken}` },
-				});
+			try {
+				if (res.isConfirmed) {
+					const url = `http://localhost:8000/api/users/${id}`;
+					const res = await axios.delete(url, {
+						headers: { Authorization: `Bearer ${hasToken}` },
+					});
 
-				if (res.data) {
-					swalToast("success", `${res.data.status}`, 270);
-					setUsers((prev) => prev.filter((user) => user.id !== id));
+					if (res.data) {
+						swalToast("success", `${res.data.status}`, 270);
+						setUsers((prev) => prev.filter((user) => user.id !== id));
+					}
+				}
+			} catch (error) {
+				// console.error(error);
+
+				if (error.response.data.line && error.response.data.line === 91) {
+					swalToast("error", `${error.response.data.message}`, 393);
 				}
 			}
 		});
@@ -75,7 +83,7 @@ export const UsersPage = () => {
 				</h1>
 
 				<div className="motion-preset-blur-up-md">
-					<div className="grid grid-cols-2 mb-4">
+					<div className="grid grid-cols-2 mb-3">
 						<Link
 							to="/users/create"
 							className="p-1 flex items-center gap-x-1.5 w-35 rounded-md hover:text-green-500 hover:text-shadow-md/15 hover:translate-x-1 duration-300 text-lg"

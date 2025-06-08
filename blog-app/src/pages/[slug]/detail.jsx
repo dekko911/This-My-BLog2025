@@ -45,7 +45,7 @@ export const BlogDetail = () => {
 							{blog?.category?.name}
 						</p>
 					</div>
-					<h1 className="text-5xl/normal font-bold mt-3 mb-3 text-shadow-sm/15">
+					<h1 className="text-5xl/normal font-bold mt-2 mb-5 text-shadow-sm/15">
 						{blog.title}
 					</h1>
 					<img

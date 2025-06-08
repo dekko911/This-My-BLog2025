@@ -19,7 +19,7 @@ class UserController extends Controller
 
     public function index()
     {
-        $users = User::oldest()->with(['roles'])->where(function ($i) {
+        $users = User::oldest('created_at')->with(['roles'])->where(function ($i) {
             if ($this->search) {
                 return $i->where('name', 'like', "%$this->search%")
                     ->orWhere('email', 'like', "%$this->search%")

@@ -59,7 +59,7 @@ export const AuthLayout = ({ children }) => {
 						Cookies.remove("name");
 						Cookies.remove("email");
 
-						navigate("/", { preventScrollReset: true });
+						navigate("/");
 
 						swalToast("info", "Goodbye !", 240);
 					}}

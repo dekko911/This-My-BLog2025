@@ -46,7 +46,7 @@ export const BlogPage = () => {
 								</Link>
 								<figcaption>
 									<p className="absolute px-3 py-1 text-[13px] tracking-widest right-5 text-white top-5 uppercase font-bold font-montserrat bg-red-600">
-										{blog?.category?.name}
+										{blog.category?.name}
 									</p>
 								</figcaption>
 							</figure>

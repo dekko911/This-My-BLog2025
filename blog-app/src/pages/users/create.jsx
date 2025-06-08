@@ -26,7 +26,7 @@ export const CreateUserPage = () => {
 				if (res.data) {
 					swalToast("success", `${res.data.message}`, 300);
 
-					navigate(-1); // -1 balik sekali, -2 balik dua kali, -3 balik tiga kali ke halaman sebelumnya
+					navigate("/users"); // -1 balik sekali, -2 balik dua kali, -3 balik tiga kali ke halaman sebelumnya
 				}
 			} catch (error) {
 				if (error.response.data.line === 817) {
@@ -41,6 +41,7 @@ export const CreateUserPage = () => {
 		[form, hasToken, navigate]
 	);
 
+	// ada atrribute onSubmit yg berisi {handleSubmit} itu akan berjalan, jika ketika kita ingin melakukan submit pada form. arti dari function handleSubmit() akan saat itu juga di re rendering ulang.
 	return (
 		<AuthLayout>
 			<div className="grid justify-center gap-y-4">

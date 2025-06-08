@@ -48,13 +48,13 @@ export const CreateRolePage = () => {
 				if (res.data) {
 					swalToast("success", `${res.data.message}`, 350);
 
-					navigate(-1);
+					navigate("/roles");
 				}
 			} catch (error) {
 				//console.error(error);
 
 				if (error.status === 500) {
-					swalToast("warning", `${error.response.data.message}`, 350);
+					swalToast("warning", `${error.response.data.message}`, 300);
 				}
 
 				if (error.status === 422) {

@@ -62,7 +62,7 @@ export const EditBlogPage = () => {
 
 				if (res.data) {
 					swalToast("success", `${res.data.message}`, 358);
-					navigate(-1);
+					navigate("/blogs");
 				}
 			} catch (error) {
 				if (error.status === 422) {
@@ -200,7 +200,7 @@ export const EditBlogPage = () => {
 							</span>
 						)}
 
-						<button className="mx-auto w-full mt-5 text-2xl uppercase bg-pink-600 p-2 rounded-lg text-white font-bold font-montserrat tracking-wide shadow-md/15 hover:bg-pink-700">
+						<button className="mx-auto cursor-pointer w-full mt-5 text-2xl uppercase bg-pink-600 p-2 rounded-lg text-white font-bold font-montserrat tracking-wide shadow-md/15 hover:bg-pink-700">
 							Submit
 						</button>
 					</form>

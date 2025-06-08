@@ -20,7 +20,7 @@ class AuthController extends Controller
 
             $roles = $user->roles()->pluck('name')->all();
 
-            $token = $user->createToken($user->name, $roles);
+            $token = $user->createToken($user->name, $roles, now()->addWeek());
 
             return response()->json([
                 'status' => 'success',

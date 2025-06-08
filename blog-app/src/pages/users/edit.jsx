@@ -40,7 +40,7 @@ export const EditUserPage = () => {
 
 				if (res.data) {
 					swalToast("success", `${res.data.message}`, 360);
-					navigate(-1);
+					navigate("/users");
 				}
 			} catch (error) {
 				if (error.status === 422) {

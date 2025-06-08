@@ -18,9 +18,9 @@ return Application::configure(basePath: dirname(__DIR__))
             'abilities' => CheckAbilities::class,
             'ability' => CheckForAnyAbility::class,
         ]);
-        $middleware->redirectGuestsTo(function () {
-            return abort(401);
-        });
+        $middleware->redirectGuestsTo(
+            fn() => abort(401)
+        );
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
