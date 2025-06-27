@@ -11,14 +11,18 @@ export const UsersPage = () => {
 	const hasToken = Cookies.get("token");
 	const navigate = useNavigate();
 
+	const [prevPage, setPrevPage] = useState("");
+	const [nextPage, setNextPage] = useState("");
+	const [currentPage, setCurrentPage] = useState(0);
+
 	const [users, setUsers] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [search, setSearch] = useState("");
 
 	useEffect(() => {
 		const fetchData = async () => {
-			const urlSearch = `http://localhost:8000/api/users?search=${search}`;
-			const res = await axios.get(urlSearch, {
+			const urlUsers = `http://localhost:8000/api/users?search=${search}&page=${currentPage}`;
+			const res = await axios.get(urlUsers, {
 				headers: { Authorization: `Bearer ${hasToken}` },
 			});
 
@@ -29,13 +33,17 @@ export const UsersPage = () => {
 
 				swalToast("warning", "Oops, Something Wen't Wrong !");
 			}
-			setUsers(res.data.users);
+			setPrevPage(res.data.users.prev_page_url);
+			setNextPage(res.data.users.next_page_url);
+			setCurrentPage(res.data.users.current_page);
+
+			setUsers(res.data.users.data);
 
 			setIsLoading(false);
 		};
 
 		fetchData();
-	}, [search, hasToken, navigate, isLoading]);
+	}, [search, hasToken, navigate, isLoading, currentPage]);
 
 	const handleDelete = (id) => {
 		swalDialogConfirm(
@@ -166,6 +174,15 @@ export const UsersPage = () => {
 								))}
 							</tbody>
 						</table>
+					</div>
+					<div className="flex justify-between">
+						<Link
+							to={prevPage}
+							className={prevPage === null ? "hidden" : "block"}
+						>
+							Previous Page
+						</Link>
+						<Link to={nextPage}>Next Page</Link>
 					</div>
 				</div>
 			</div>

@@ -4,8 +4,11 @@ import { Link, useLocation, useNavigate } from "react-router";
 import { Footer } from "../../components/footer";
 import { Header } from "../../components/header";
 import { swalToast } from "../../lib/sweet-alert";
+import axios from "axios";
 
 export const AuthLayout = ({ children }) => {
+	const hasToken = Cookies.get("token");
+
 	const location = useLocation();
 	const navigate = useNavigate();
 
@@ -16,6 +19,19 @@ export const AuthLayout = ({ children }) => {
 			swalToast("warning", "Oops, Something Went Wrong !");
 		}
 	}, [navigate]);
+
+	const handleLogout = async (e) => {
+		e.preventDefault();
+
+		const url = `http://localhost:8000/api/logout`;
+		const res = await axios.post(url, {
+			headers: { Authorization: `Bearer ${hasToken}` },
+		});
+
+		if (res.data) {
+			if (res.data.status) return;
+		}
+	};
 
 	return (
 		<div className="bg-linear-90 from-zinc-700 to-zinc-500">
@@ -63,6 +79,7 @@ export const AuthLayout = ({ children }) => {
 
 						swalToast("info", "Goodbye !", 240);
 					}}
+					onSubmit={handleLogout}
 				>
 					Logout
 				</button>
