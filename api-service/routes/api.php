@@ -8,12 +8,15 @@ use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+// http://localhost:8000/api/users?search=${search}&page=${page} another clue
+
 Route::get(
     '/user',
     fn(Request $request) => $request->user()
 )->middleware(['auth:sanctum']);
 
 Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth:sanctum');
 
 Route::middleware(['auth:sanctum', 'ability:admin'])->group(function () {
     Route::apiResource('/users', UserController::class);

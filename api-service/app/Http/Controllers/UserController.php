@@ -25,7 +25,7 @@ class UserController extends Controller
                     ->orWhere('email', 'like', "%$this->search%")
                     ->orWhereRelation('roles', 'name', 'like', "%$this->search%");
             }
-        })->get();
+        })->paginate(5);
 
         return response()->json([
             'users' => $users,

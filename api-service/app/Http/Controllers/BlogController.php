@@ -6,7 +6,7 @@ use App\Models\Blog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
+use Yaza\LaravelGoogleDriveStorage\Gdrive;
 
 /**
  * Controller for Blogs.
@@ -14,12 +14,23 @@ use Illuminate\Support\Str;
 class BlogController extends Controller
 {
     protected $search;
+
     public $file;
+
+    // protected $disk;
 
     public function __construct(Request $request)
     {
         $this->search = request('search');
         $this->file = $request->file('photo');
+        // $this->disk = Storage::build([
+        //     'driver' => 'google',
+        //     'clientId' => env('GOOGLE_DRIVE_CLIENT_ID'),
+        //     'clientSecret' => env('GOOGLE_DRIVE_CLIENT_SECRET'),
+        //     'accessToken' => Auth::user()->currentAccessToken(), // Get from authenticated user
+        //     'refreshToken' => env('GOOGLE_DRIVE_REFRESH_TOKEN'),
+        //     'folder' => env('GOOGLE_DRIVE_FOLDER'),
+        // ]);
     }
 
     public function index()
@@ -66,30 +77,24 @@ class BlogController extends Controller
             'slug' => ['required'],
             'description' => ['required'],
             'release' => ['required'],
-            'photo' => ['required', 'file', 'mimes:png,jpg,webp'],
+            'photo' => ['nullable', 'mimes:png,jpg,webp'],
         ]);
 
         if ($this->file) {
             $extension = $this->file->extension();
-            $file_name = Str::random(20) . '.' . $extension;
+            $fileName = rand(10000, 15000) . '.' . $extension;
 
-            $this->file->storeAs('blogs/photo', $file_name, 'public');
+            $this->file->storeAs('blogs/photo', $fileName, 'public');
         }
 
-        // get the authenticated user where the ID is.
-        $user_id = Auth::id();
-
-        // boleh juga pakai yg ini.
-        // $user_id = $request->user()->id;
-
         $blog = Blog::create([
-            'user_id' => $user_id,
+            'user_id' => Auth::id(),
             'category_id' => $request->category_id,
             'title' => $request->title,
             'slug' => $request->slug,
             'description' => $request->description,
             'release' => $request->release,
-            'photo' => $file_name ?? null,
+            'photo' => $fileName ?? "-",
             // tanda ?? kalau variable $file_name tidak ada isi, maka diberi nilai null / kalau variable $file_name ada isi, maka nilai null tidak digunakan. "NULL COALESCING"
         ]);
 
@@ -109,16 +114,18 @@ class BlogController extends Controller
             'release' => ['required'],
         ]);
 
-        // if ($this->file) {
-        //     if ($request->old('photo')) {
-        //         Storage::delete('blogs/photo/' . $request->old('photo'));
-        //     }
+        $updatePhoto = $blog->findOrFail($blog['id']);
 
-        //     $extension = $this->file->extension();
-        //     $file_name = Str::random(20) . '.' . $extension;
+        if ($this->file) {
+            if ($updatePhoto->photo) {
+                Storage::disk('public')->delete("blogs/photo/$updatePhoto->photo");
+            }
 
-        //     $this->file->storeAs('blogs/photo', $file_name, 'public');
-        // }
+            $extension = $this->file->extension();
+            $fileName = rand(10000, 15000) . '.' . $extension;
+
+            $this->file->storeAs('blogs/photo', $fileName, 'public');
+        }
 
         $blog->update([
             'user_id' => $request->user_id,
@@ -129,6 +136,10 @@ class BlogController extends Controller
             'release' => $request->release,
         ]);
 
+        if ($blog->photo) {
+            $blog->update(['photo' => $fileName]);
+        }
+
         return response()->json([
             'blog' => $blog,
             'message' => 'Data Has Been Updated !',
@@ -138,7 +149,8 @@ class BlogController extends Controller
     public function destroy(Blog $blog)
     {
         if ($blog->photo) {
-            Storage::delete("blogs/photo/$blog->photo");
+            Storage::disk('public')->delete("blogs/photo/$blog->photo");
+            // Gdrive::delete("blog-photo/$blog->photo");
         }
 
         Blog::destroy($blog->id);

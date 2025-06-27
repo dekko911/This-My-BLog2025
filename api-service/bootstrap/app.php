@@ -18,6 +18,9 @@ return Application::configure(basePath: dirname(__DIR__))
             'abilities' => CheckAbilities::class,
             'ability' => CheckForAnyAbility::class,
         ]);
+
+        $middleware->statefulApi();
+
         $middleware->redirectGuestsTo(
             fn() => abort(401)
         );

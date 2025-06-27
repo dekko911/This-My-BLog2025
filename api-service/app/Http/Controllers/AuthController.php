@@ -20,7 +20,7 @@ class AuthController extends Controller
 
             $roles = $user->roles()->pluck('name')->all();
 
-            $token = $user->createToken($user->name, $roles, now()->addWeek());
+            $token = $user->createToken($user->name, $roles, now()->addDay());
 
             return response()->json([
                 'status' => 'success',
@@ -32,6 +32,15 @@ class AuthController extends Controller
         return response()->json([
             'status' => 'fail',
             'message' => 'Wrong Email Or Password !',
+        ]);
+    }
+
+    public function logout(Request $request)
+    {
+        $request->user()->tokens()->delete();
+
+        return response()->json([
+            'status' => "You're Has Been Logout.",
         ]);
     }
 }
